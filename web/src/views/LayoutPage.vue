@@ -7,7 +7,8 @@ interface MenuOptions{
   selectedKeys?:Array<string>,
   collapsed?:boolean,
   isLight?:boolean,
-  style?:Object
+  width?:string,
+  height?:string
 }
 
 interface MenuList{
@@ -22,10 +23,8 @@ const menuOptions = reactive<MenuOptions>({
   selectedKeys:[],
   collapsed:false,
   isLight:true,
-  style:{
-    width:'225px',
-    height:'100%'
-  }
+  width:'225px',
+  height:'100%'
 })
 
 const menuList = reactive<Array<MenuList>>([
@@ -42,9 +41,9 @@ const isCollapsed = () => {
   menuOptions.collapsed = !menuOptions.collapsed
   menuOptions.isLight = !menuOptions.isLight
   if(menuOptions.collapsed){
-    menuOptions.style.width = '70px'
+    menuOptions.width = '70px'
   }else{
-    menuOptions.style.width = '225px'
+    menuOptions.width = '225px'
   }
 }
 </script>
@@ -58,7 +57,7 @@ const isCollapsed = () => {
       mode="inline"
       :theme="menuOptions.isLight ? 'light' : 'dark'"
       :inline-collapsed="menuOptions.collapsed"
-      :style="menuOptions.style"
+      :style="{width:menuOptions.width,height:menuOptions.height}"
     >
     <div class="logo">
       12312131
@@ -75,7 +74,13 @@ const isCollapsed = () => {
   </a-menu>
     </div>
     <div class="screen">
-      <div class="pageHead"></div>
+      <div class="pageHead">
+        <div class="path">
+          <WlSvgSource src="../assets/svg/menuFlod.svg"></WlSvgSource>
+          
+        </div>
+        <div class="sys"></div>
+      </div>
       <div class="pageMain"></div>
       <!-- <button @click="isCollapsed">132</button> -->
     </div>
@@ -104,7 +109,19 @@ const isCollapsed = () => {
         width: 98%;
         height: 5%;
         margin: 0 auto; 
+        display: flex;
+        justify-content: center;
         background-color: #fff;
+        .path{
+          width: 49%;
+          height: 100%;
+          background-color: aqua;
+        }
+        .sys{
+          width: 49%;
+          height: 100%;
+          background-color: rgb(243, 220, 9);
+        }
       }
 
       .pageMain{
