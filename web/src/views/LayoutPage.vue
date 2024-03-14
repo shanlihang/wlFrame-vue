@@ -75,7 +75,9 @@ const isCollapsed = () => {
   </a-menu>
     </div>
     <div class="screen">
-      <button @click="isCollapsed">132</button>
+      <div class="pageHead"></div>
+      <div class="pageMain"></div>
+      <!-- <button @click="isCollapsed">132</button> -->
     </div>
     
     
@@ -97,7 +99,20 @@ const isCollapsed = () => {
     }
     .screen{
       flex: 1 0 auto;
-      background-color: brown;
+      background-color: #F5F5F5;
+      .pageHead{
+        width: 98%;
+        height: 5%;
+        margin: 0 auto; 
+        background-color: #fff;
+      }
+
+      .pageMain{
+        width: 98%;
+        height: 93%;
+        margin: 1% auto 0;
+        background-color: #fff;
+      }
     }
 }
 </style>
