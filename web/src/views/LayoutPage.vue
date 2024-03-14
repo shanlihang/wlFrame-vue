@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="layout">
     <a-tag color="pink">pink</a-tag>
     <a-tag color="red">red</a-tag>
     <a-tag color="orange">orange</a-tag>
@@ -14,4 +14,9 @@
 </template>
 
 <style scoped>
+.layout{
+    width: 100%;
+    height: 100vh;
+    background-color: aqua;
+}
 </style>
