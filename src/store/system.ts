@@ -4,13 +4,13 @@ import {ThemeOption} from '@/model/app'
 
 export const useSystemStore = defineStore('system',() => {
     const theme = reactive<ThemeOption>({
-        pageBgColor:'#282828',
-        boxBgColor:'#494949',
+        pageBgColor:'#f1f1f1',
+        boxBgColor:'#fff',
         primaryColor:'#34e1f6',
         infoColor:'#A0A0A0',
         warnColor:'#ff0000',
-        mainFontColor:'#E0E0E0',
-        subFontColor:'#fff',
+        mainFontColor:'#282829',
+        subFontColor:'rgba(0,0,0,0.5)',
         hoverColor:'#fff',
         selectColor:'#000'
     })
