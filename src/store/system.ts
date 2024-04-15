@@ -18,4 +18,12 @@ export const useSystemStore = defineStore('system',() => {
     const waterRemark = ref<string>('123456')
 
     return {theme,waterRemark}
-})
+    },
+    {
+        persist: {
+            key: 'theme',
+            storage: sessionStorage,
+        }
+
+    }
+)
