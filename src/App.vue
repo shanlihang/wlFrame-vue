@@ -6,15 +6,13 @@ const store = useSystemStore()
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div style="width: 500px;height: 500px;background-color: aqua;">
+    <router-view></router-view>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <router-link to="/test1">test1</router-link>
+  <router-link to="/test2">test2</router-link>
+  
+
 </template>
 
 <style>
