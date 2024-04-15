@@ -11,8 +11,8 @@ export const useSystemStore = defineStore('system',() => {
         warnColor:'#ff0000',
         mainFontColor:'#E0E0E0',
         subFontColor:'#fff',
-        mainFontSize:'24rpx',
-        subFontSize:'18rpx'
+        hoverColor:'#fff',
+        selectColor:'#000'
     })
 
     const waterRemark = ref<string>('123456')
