@@ -1,24 +1,7 @@
 <template>
   <div class="layout page">
     <div class="menu box">
-      <a-menu v-model:selectedKeys="menuState.selectedKeys" theme="dark" mode="inline" :style="{height: '100%',width:menuState.width,backgroundColor:system.theme.boxBgColor,color:system.theme.mainFontColor}">
-        <a-menu-item key="1">
-          <user-outlined />
-          <span class="nav-text">nav 1</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <video-camera-outlined />
-          <span class="nav-text">nav 2</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <upload-outlined />
-          <span class="nav-text">nav 3</span>
-        </a-menu-item>
-        <a-menu-item key="4">
-          <user-outlined />
-          <span class="nav-text">nav 4</span>
-        </a-menu-item>
-      </a-menu>
+      <MenuList />
     </div>
     <div class="area">
       <div class="header box">123456</div>
@@ -31,15 +14,10 @@
 </template>
 <script lang="ts" setup>
 import {useSystemStore} from '@/store/system'
-import { reactive } from 'vue';
-import { UserOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons-vue';
+import MenuList from '@/components/menu/MenuList.vue';
 
 const system = useSystemStore()
 
-const menuState = reactive({
-  width:'236px',
-  selectedKeys:['4']
-})
 
 </script>
 <style scoped>
