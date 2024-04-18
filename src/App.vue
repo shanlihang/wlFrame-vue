@@ -6,9 +6,6 @@
     <div class="area">
       <div class="header box">123456</div>
       <div class="main box">123156456</div>
-      <div class="footer subFont">
-        wlFrame-vue ©2024 Created by slh67490009@gmail.com
-      </div>
     </div>
   </div>
 </template>
@@ -44,14 +41,6 @@ const system = useSystemStore()
   margin: 10px auto 0;
   border-radius: 6px;
   overflow: hidden;
-}
-.layout .area .footer{
-  width: 100%;
-  height: 25px;
-  font-size: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 </style>
 
