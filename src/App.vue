@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import MenuList from '@/components/menu/MenuList.vue';
+import MenuList from '@/components/layout/MenuList.vue';
 
 
 </script>
@@ -22,6 +22,7 @@ import MenuList from '@/components/menu/MenuList.vue';
 }
 .layout .menu{
   height: 100%;
+  /* overflow: hidden; */
   background-color: #fff;
 }
 .layout .area{
@@ -39,7 +40,7 @@ import MenuList from '@/components/menu/MenuList.vue';
 .layout .area .main{
   width: 99%;
   flex :1 0 auto;
-  margin: 10px auto 10px;
+  margin: 10px auto 0;
   border-radius: 6px;
   overflow: hidden;
   background-color: #fff;

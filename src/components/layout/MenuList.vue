@@ -132,15 +132,15 @@ const list = [
 
 <style scoped lang="less">
 .menuList {
-  height: 100vh;
+  height: 100%;
   width: 256px;
+  padding-top: 10px;
 
   .menu {
     margin: 0 20px;
     height: 100%;
 
     .logo {
-      margin-top: 10px;
       height: 80px;
       background-color: aliceblue;
     }
