@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import router from '@/router';
 import {DownOutlined} from '@ant-design/icons-vue'
 import {pinyin} from 'pinyin-pro'
 import {onMounted} from 'vue'
 
-const getFirstLetter = () => {
-  return pinyin("hello",{toneType:'none'}).charAt(0)
+const getFirstLetter = (name:string) => {
+  return pinyin(name,{toneType:'none'}).charAt(0)
+}
+
+const goHome = () => {
+  router.push('/home')
 }
 
 onMounted(() => {
-  getFirstLetter()
 })
 
 </script>
@@ -18,12 +22,12 @@ onMounted(() => {
     <div class="user-card">
       <a-popover>
         <template #content>
-          <p class="option">个人中心</p>
+          <p class="option" @click="goHome">个人中心</p>
           <p class="option">退出登录</p>
         </template>
         <div class="user">
           <div class="info">
-            <a-avatar style="color: #f56a00; background-color: #fde3cf;">{{ getFirstLetter() }}</a-avatar>
+            <a-avatar style="color: #f56a00; background-color: #fde3cf;">{{ getFirstLetter("shan") }}</a-avatar>
             <span style="margin-left: 5px;">是否是哦啥佛山是南方商城name</span>
           </div>
           <div class="icon">
