@@ -4,13 +4,16 @@
       <MenuList />
     </div>
     <div class="area">
-      <div class="header">123456</div>
+      <div class="header">
+        <HeaderLine />
+      </div>
       <div class="main">123156456</div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import MenuList from '@/components/layout/MenuList.vue';
+import HeaderLine from '@/components/layout/HeaderLine.vue';
 
 
 </script>
@@ -40,7 +43,7 @@ import MenuList from '@/components/layout/MenuList.vue';
 .layout .area .main{
   width: 99%;
   flex :1 0 auto;
-  margin: 10px auto 0;
+  margin: 10px auto;
   border-radius: 6px;
   overflow: hidden;
   background-color: #fff;
