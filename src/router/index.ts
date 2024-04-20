@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import HelloWord from '@/components/HelloWorld.vue'
 
 const routes = [
@@ -7,12 +7,8 @@ const routes = [
         component:HelloWord
     },
     {
-        path:'/test1',
-        component:() => import('@/views/Test1.vue')
-    },
-    {
-        path:'/test2',
-        component:() => import('@/views/Test2.vue')
+        path:'/login',
+        component:() => import('@/views/login/LoginPage.vue')
     },
     {
         path:'/home',
@@ -24,5 +20,11 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+    console.log('to:',to);
+})
+
+router.afterEach(() => {})
 
 export default router

@@ -1,5 +1,8 @@
 <template>
-  <div class="layout">
+  <div class="login" v-if="flag">
+    <router-view></router-view>
+  </div>
+  <div class="layout" v-else>
     <div class="menu">
       <MenuList />
     </div>
@@ -14,14 +17,30 @@
       </div>
     </div>
   </div>
+  
 </template>
 <script lang="ts" setup>
 import MenuList from '@/components/layout/MenuList.vue';
 import HeaderLine from '@/components/layout/HeaderLine.vue';
+import {useSystemStore} from '@/store/system'
+import {onMounted,ref} from 'vue'
 
+const flag = ref<boolean>(false)
+
+const store = useSystemStore()
+
+
+onMounted(() => {
+  console.log(store.isLoginPage)
+})
 
 </script>
 <style scoped>
+/* .login{
+  width: 100%;
+  height: 100vh;
+  background-color: black;
+} */
 .layout{
   height: 100vh;
   display: flex;
@@ -29,7 +48,6 @@ import HeaderLine from '@/components/layout/HeaderLine.vue';
 }
 .layout .menu{
   height: 100%;
-  /* overflow: hidden; */
   background-color: #fff;
 }
 .layout .area{

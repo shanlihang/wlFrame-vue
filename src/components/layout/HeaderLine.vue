@@ -8,6 +8,10 @@ const getFirstLetter = (name:string) => {
   return pinyin(name,{toneType:'none'}).charAt(0)
 }
 
+const goIndex = () => {
+  router.push('/')
+}
+
 const goHome = () => {
   router.push('/home')
 }
@@ -22,6 +26,7 @@ onMounted(() => {
     <div class="user-card">
       <a-popover>
         <template #content>
+          <p class="option" @click="goIndex">首页</p>
           <p class="option" @click="goHome">个人中心</p>
           <p class="option">退出登录</p>
         </template>
