@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HelloWord from '@/components/HelloWorld.vue'
+import IndexPage from '@/views/base/IndexPage.vue'
 
 const routes = [
     {
         path:'/',
-        component:HelloWord
+        component:IndexPage
     },
     {
         path:'/login',
-        component:() => import('@/views/login/LoginPage.vue')
+        component:() => import('@/views/base/LoginPage.vue')
     },
     {
         path:'/home',
