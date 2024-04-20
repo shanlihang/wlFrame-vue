@@ -7,7 +7,11 @@
       <div class="header">
         <HeaderLine />
       </div>
-      <div class="main">123156456</div>
+      <div class="main">
+        <a-watermark content="slh 2020082403">
+          <router-view></router-view>
+        </a-watermark>
+      </div>
     </div>
   </div>
 </template>

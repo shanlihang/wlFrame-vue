@@ -3,8 +3,6 @@
 </script>
 
 <template>
-  
-
   <div class="card page">
     <p>
       1
