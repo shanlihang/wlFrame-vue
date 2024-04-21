@@ -23,6 +23,14 @@ const routes = [
         path:'/role',
         component:() => import('@/views/system/RoleManage.vue')
     },
+    {
+        path:'/good',
+        component:() => import('@/views/medical/GoodManage.vue')
+    },
+    {
+        path:'/result',
+        component:() => import('@/views/medical/ResultManage.vue')
+    },
 ]
 
 const router = createRouter({
