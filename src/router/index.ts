@@ -19,6 +19,10 @@ const routes = [
         path:'/user',
         component:() => import('@/views/system/UserManage.vue')
     },
+    {
+        path:'/role',
+        component:() => import('@/views/system/RoleManage.vue')
+    },
 ]
 
 const router = createRouter({
