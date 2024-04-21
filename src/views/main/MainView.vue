@@ -51,13 +51,14 @@ onMounted(() => {
 .layout .area{
   height: 100%;
   flex: 1 0 auto;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   background-color: #eeeeee;
 }
 .layout .area .header{
   margin-left: 1px;
-  height: 50px;
+  min-height: 50px;
   background-color: #fff;
 }
 .layout .area .main{
@@ -65,7 +66,6 @@ onMounted(() => {
   flex :1 0 auto;
   margin: 10px auto;
   border-radius: 6px;
-  overflow: hidden;
   background-color: #fff;
 }
 </style>

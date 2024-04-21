@@ -13,7 +13,12 @@ const routes = [
     {
         path:'/home',
         component:() => import('@/views/system/UserCenter.vue')
-    }
+    },
+    //
+    {
+        path:'/user',
+        component:() => import('@/views/system/UserManage.vue')
+    },
 ]
 
 const router = createRouter({
