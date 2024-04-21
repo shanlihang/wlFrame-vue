@@ -12,6 +12,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@types/node": "^20.12.7",
     "ant-design-vue": "^4.1.2",
+    "dayjs": "^1.11.10",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "pinyin-pro": "^3.20.2",
