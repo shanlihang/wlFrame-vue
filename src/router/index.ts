@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import IndexPage from '@/views/base/IndexPage.vue'
+import {MenuType,RouteType} from '@/model/menu'
 
 const routes = [
     {
@@ -38,8 +39,26 @@ const router = createRouter({
   routes
 })
 
+
 router.beforeEach(() => {})
 
 router.afterEach(() => {})
 
+
+
 export default router
+
+export function AddRoutes(list:MenuType[]){
+    list.forEach(element => {
+        element.children.forEach(item => {
+            router.addRoute({
+                path:item.uri,
+                component:() =>import('@/views/'+item.component+'.vue'),
+                meta:{
+                    title:item.name
+                }
+            })
+            
+        })
+    })
+}
