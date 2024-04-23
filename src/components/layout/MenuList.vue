@@ -1,115 +1,6 @@
 <script setup lang="ts">
 
-const list = [
-  {
-    "ID": 3,
-    "CreatedAt": "2024-04-05T21:33:06+08:00",
-    "UpdatedAt": "2024-04-05T21:33:06+08:00",
-    "DeletedAt": null,
-    "name": "系统",
-    "component": "nulla officia sunt aliqua eu",
-    "icon": "http://dummyimage.com/100x100",
-    "parentId": null,
-    "router": "Excepteur mollit aute aliquip dolor",
-    "sort": 1,
-    "type": 0,
-    "uri": "Duis sint",
-    "children": [
-      {
-        "ID": 4,
-        "CreatedAt": "2024-04-06T18:49:10+08:00",
-        "UpdatedAt": "2024-04-06T18:49:10+08:00",
-        "DeletedAt": null,
-        "name": "用户管理",
-        "component": "veniam cupidatat exercitation",
-        "icon": "http://dummyimage.com/100x100",
-        "parentId": 9,
-        "router": "magna adipisicing velit pariatur",
-        "sort": 1,
-        "type": 1,
-        "uri": "occaecat fugiat nostrud dolore",
-        "children": null
-      },
-      {
-        "ID": 5,
-        "CreatedAt": "2024-04-06T18:49:15+08:00",
-        "UpdatedAt": "2024-04-06T18:49:15+08:00",
-        "DeletedAt": null,
-        "name": "角色管理",
-        "component": "nulla mollit",
-        "icon": "http://dummyimage.com/100x100",
-        "parentId": 9,
-        "router": "esse ipsum",
-        "sort": 1,
-        "type": 1,
-        "uri": "elit proident labore",
-        "children": null
-      }
-    ]
-  },
-  {
-    "ID": 9,
-    "CreatedAt": "0001-01-01T00:00:00Z",
-    "UpdatedAt": "0001-01-01T00:00:00Z",
-    "DeletedAt": null,
-    "name": "超级管理员",
-    "component": null,
-    "icon": null,
-    "parentId": null,
-    "router": null,
-    "sort": null,
-    "type": 0,
-    "uri": null,
-    "children": [
-      {
-        "ID": 4,
-        "CreatedAt": "2024-04-06T18:49:10+08:00",
-        "UpdatedAt": "2024-04-06T18:49:10+08:00",
-        "DeletedAt": null,
-        "name": "用户管理",
-        "component": "veniam cupidatat exercitation",
-        "icon": "http://dummyimage.com/100x100",
-        "parentId": 9,
-        "router": "magna adipisicing velit pariatur",
-        "sort": 1,
-        "type": 1,
-        "uri": "occaecat fugiat nostrud dolore",
-        "children": null
-      },
-      {
-        "ID": 5,
-        "CreatedAt": "2024-04-06T18:49:15+08:00",
-        "UpdatedAt": "2024-04-06T18:49:15+08:00",
-        "DeletedAt": null,
-        "name": "角色管理",
-        "component": "nulla mollit",
-        "icon": "http://dummyimage.com/100x100",
-        "parentId": 9,
-        "router": "esse ipsum",
-        "sort": 1,
-        "type": 1,
-        "uri": "elit proident labore",
-        "children": null
-      },
-      {
-        "ID": 6,
-        "CreatedAt": "2024-04-06T18:49:22+08:00",
-        "UpdatedAt": "2024-04-06T18:49:22+08:00",
-        "DeletedAt": null,
-        "name": "权限管理",
-        "component": "laboris ad",
-        "icon": "http://dummyimage.com/100x100",
-        "parentId": 9,
-        "router": "magna adipisicing velit pariatur",
-        "sort": 1,
-        "type": 1,
-        "uri": "tempor in Ut",
-        "children": null
-      }
-    ]
-  }
-]
-
+const data = defineProps(['list'])
 </script>
 
 <template>
@@ -118,7 +9,7 @@ const list = [
       <div class="logo">
         <slot name="logo">LOGO</slot>
       </div>
-      <div class="list" v-for="item in list" :key="item.ID">
+      <div class="list" v-for="item in data.list" :key="item.ID">
         <div class="title">{{ item.name }}</div>
         <div class="child">
           <div class="sub" v-for="i in item.children" :key="i.ID">

@@ -4,7 +4,7 @@
   </div>
   <div class="layout" v-else>
     <div class="menu">
-      <MenuList />
+      <MenuList :list="state.list"/>
     </div>
     <div class="area">
       <div class="header">
@@ -22,19 +22,32 @@
 <script lang="ts" setup>
 import MenuList from '@/components/layout/MenuList.vue';
 import HeaderLine from '@/components/layout/HeaderLine.vue';
-import {ref,onMounted} from 'vue'
+import {ref,onMounted, reactive} from 'vue'
 import {getMenuList} from '@/api/permission'
-
+import {AddRoutes} from '@/router/liveRoute'
+import {MenuType} from '@/model/menu'
 const flag = ref<boolean>(false)
+
+interface State{
+  list:MenuType[]
+}
+
+const state = reactive<State>({
+  list:[]
+})
 
 onMounted(() => {
     if(location.pathname == '/login'){
         flag.value = !flag.value
     }
     getMenuList().then(res => {
-      console.log(res);
-      
+      state.list = res.data
+      let a = AddRoutes(state.list)
+      console.log(a);
     })
+    
+    
+
 })
 
 </script>
