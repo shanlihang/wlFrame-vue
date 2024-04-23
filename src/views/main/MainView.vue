@@ -23,6 +23,7 @@
 import MenuList from '@/components/layout/MenuList.vue';
 import HeaderLine from '@/components/layout/HeaderLine.vue';
 import {ref,onMounted} from 'vue'
+import {getMenuList} from '@/api/permission'
 
 const flag = ref<boolean>(false)
 
@@ -30,6 +31,10 @@ onMounted(() => {
     if(location.pathname == '/login'){
         flag.value = !flag.value
     }
+    getMenuList().then(res => {
+      console.log(res);
+      
+    })
 })
 
 </script>
