@@ -58,7 +58,6 @@ export function AddRoutes(list:MenuType[]){
                     title:item.name
                 }
             })
-            
         })
     })
 }

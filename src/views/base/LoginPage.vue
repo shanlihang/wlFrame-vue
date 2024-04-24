@@ -1,28 +1,34 @@
 <script setup lang="ts">
 import {reactive} from 'vue'
+import {login,register} from '@/api/system'
+import {Session} from '@/utils/storage'
+import router from '@/router';
 
-interface FormData {
+interface LoginForm {
   username:string,
   password:string,
-  key:string,
-  code:string
+  // key:string,
+  // code:string
 }
 
 interface Data{
-  formData:FormData
+  loginForm:LoginForm
 }
 
 const data = reactive<Data>({
-  formData:{
+  loginForm:{
     username:'',
     password:'',
-    key:'',
-    code:''
+    // key:'',
+    // code:''
   }
 })
 
 const onFinish = () => {
-  console.log(data.formData);
+  login(data.loginForm).then(res => {
+    Session.setBase("token",res.token)
+    router.push('/')
+  })
   
 }
 
@@ -34,7 +40,7 @@ const onFinish = () => {
       <div class="form">
         <div class="title">医疗管理系统</div>
         <div class="input">
-          <a-form :model="data.formData"  autocomplete="off" @finish="onFinish">
+          <a-form :model="data.loginForm"  autocomplete="off" @finish="onFinish">
             <a-form-item
               label="用户名"
               name="username"
@@ -42,7 +48,7 @@ const onFinish = () => {
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 16 }"
             >
-              <a-input v-model:value="data.formData.username" placeholder="请输入用户名" />
+              <a-input v-model:value="data.loginForm.username" placeholder="请输入用户名" />
             </a-form-item>
             <a-form-item
               label="密码"
@@ -51,7 +57,7 @@ const onFinish = () => {
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 16 }"
             >
-              <a-input v-model:value="data.formData.password"  placeholder="请输入密码" />
+              <a-input v-model:value="data.loginForm.password"  placeholder="请输入密码" />
             </a-form-item>
             <a-form-item>
               <div style="display: flex;justify-content: center;">

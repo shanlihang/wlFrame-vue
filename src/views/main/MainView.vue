@@ -24,8 +24,9 @@ import MenuList from '@/components/layout/MenuList.vue';
 import HeaderLine from '@/components/layout/HeaderLine.vue';
 import {ref,onMounted, reactive} from 'vue'
 import {getMenuList} from '@/api/permission'
-import {AddRoutes} from '@/router/liveRoute'
 import {MenuType} from '@/model/menu'
+import {AddRoutes} from '@/router/index'
+
 const flag = ref<boolean>(false)
 
 interface State{
@@ -42,8 +43,8 @@ onMounted(() => {
     }
     getMenuList().then(res => {
       state.list = res.data
-      let a = AddRoutes(state.list)
-      console.log(a);
+      // let a = AddRoutes(state.list)
+      // console.log(a);
     })
     
     
