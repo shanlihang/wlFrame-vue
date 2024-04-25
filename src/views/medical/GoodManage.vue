@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive,onMounted } from 'vue';
+import {getGoodsList,deleteGoods} from '@/api/goods'
+import {message,Modal} from 'ant-design-vue'
 
 interface Table{
     key:string,
@@ -30,34 +32,7 @@ const data = reactive<Form>({
         created_at:'',
         updated_at:''
     },
-    table:[
-        {
-            key: '1',
-            name:'利器盒',
-            num:undefined,
-            uint:'个',
-            remark:'sfgjoasjfsajkfp',
-            created_at:'2024-03-20',
-            updated_at:'2024-05-10'
-        },
-        {
-            key: '2',
-            name: 'John Brown',
-            num:10,
-            uint:'个',
-            remark:'sfgjoasjfsajkfp',
-            created_at:'2024-03-20',
-            updated_at:'2024-05-10'
-        },
-        {
-            key: '3',
-            name: 'John Brown',
-            num:undefined,
-            remark:'sfgjoasjfsajkfp',
-            created_at:'2024-03-20',
-            updated_at:'2024-05-10'
-        },
-]
+    table:[]
 })
 
 const columns = [
@@ -97,6 +72,38 @@ const columns = [
         align:'center'
     },
 ];
+
+const handleDelete = (id:number) => {
+    Modal.confirm({
+        title: '删除确认',
+        content: '您确定要删除这条记录吗？',
+        okText:'确定',
+        cancelText:'取消',
+        onOk() {
+            deleteGoods(id).then(res => {
+                if(res.rowAffect == 1){
+                    initData()
+                    message.success('删除成功')
+                }
+            })
+        },
+        onCancel() {
+            message.info('取消删除操作')
+        },
+    });
+    
+    
+}
+
+const initData = () => {
+    getGoodsList().then(res => {
+        data.table = res.data;  
+    })
+}
+
+onMounted(() => {
+    initData()
+})
 </script>
 
 <template>
@@ -151,7 +158,7 @@ const columns = [
                 <template v-if="column.key === 'action'">
                     <a-button type="link">详情</a-button>
                     <a-button type="link">编辑</a-button>
-                    <a-button type="link" danger>删除</a-button>
+                    <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
                 <template v-else-if="column.key === 'num'">
                     {{record.num<=0||record.num==undefined?'暂无库存':record.num.toString()+record.uint}}
