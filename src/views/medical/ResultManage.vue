@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive,onMounted } from 'vue';
+import {getResultList,deleteResult} from '@/api/result'
+import {message,Modal} from 'ant-design-vue'
 
  export interface Result {
     blood?: Blood;
@@ -98,7 +100,6 @@ export interface Xt {
     value: string;
 }
 
-
 interface SearchForm{
     searchForm:{
         name:string,
@@ -112,74 +113,7 @@ const data = reactive<SearchForm>({
         name:'',
         idnumber:''
     },
-    table:[
-        {
-            sfz:{
-                name:'Mike',
-                sex:'男',
-                nation:'汉族',
-                birthday:'2000-01-20',
-                idnumber:'230184222211111025',
-                age:'25'
-            },
-            hw:{
-                height:'170',
-                weight:'120',
-                bmi:'14.27'
-            },
-            blood:{
-                high:'140',
-                low:'80',
-                rate:'120',
-                rhigh:'138',
-                rlow:'85'
-            }
-        },
-        {
-            sfz:{
-                name:'Aliu',
-                sex:'男',
-                nation:'汉族',
-                birthday:'2000-01-20',
-                idnumber:'230184222211111025',
-                age:'25'
-            },
-            hw:{
-                height:'170',
-                weight:'120',
-                bmi:'14.27'
-            },
-            blood:{
-                high:'140',
-                low:'80',
-                rate:'120',
-                rhigh:'138',
-                rlow:'85'
-            }
-        },
-        {
-            sfz:{
-                name:'Jay',
-                sex:'男',
-                nation:'汉族',
-                birthday:'2000-01-20',
-                idnumber:'230184222211111025',
-                age:'25'
-            },
-            hw:{
-                height:'170',
-                weight:'120',
-                bmi:'14.27'
-            },
-            blood:{
-                high:'140',
-                low:'80',
-                rate:'120',
-                rhigh:'138',
-                rlow:'85'
-            }
-        },
-]
+    table:[]
 })
 
 const columns = [
@@ -242,6 +176,38 @@ const columns = [
         width:220
     },
 ];
+
+const handleDelete = (id:number) => {
+    Modal.confirm({
+        title: '删除确认',
+        content: '您确定要删除这条记录吗？',
+        okText:'确定',
+        cancelText:'取消',
+        onOk() {
+            deleteResult(id).then(res => {
+                if(res.rowAffect == 1){
+                    initData()
+                    message.success('删除成功')
+                }
+            })
+        },
+        onCancel() {
+            message.info('取消删除操作')
+        },
+    });
+    
+    
+}
+
+const initData = () => {
+    getResultList().then(res => {
+        data.table = res.data
+    })
+}
+
+onMounted(() => {
+    initData()
+})
 </script>
 
 <template>
@@ -292,7 +258,7 @@ const columns = [
                 <template v-if="column.key === 'action'">
                     <a-button type="link">详情</a-button>
                     <a-button type="link">编辑</a-button>
-                    <a-button type="link" danger>删除</a-button>
+                    <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
                 <template v-else-if="column.key === 'name'">
                     {{ record.sfz.name }}
