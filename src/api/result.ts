@@ -1,7 +1,7 @@
 import request  from "@/utils/request";
 
 // 查询结果列表
-export function getGoodsList(){
+export function getResultList(){
     return request({
         url:'/api/v1/medical/result/list',
         method:'get'
@@ -10,7 +10,7 @@ export function getGoodsList(){
 
 
 // 新增结果
-export function addGoods(data:object){
+export function addResult(data:object){
     return request({
         url:'/api/v1/medical/result/add',
         method:'post',
@@ -19,7 +19,7 @@ export function addGoods(data:object){
 }
 
 // 删除结果
-export function deleteGoods(id:number){
+export function deleteResult(id:number){
     return request({
         url:'/api/v1/medical/result/'+id,
         method:'delete',
