@@ -1,6 +1,14 @@
 <script setup lang="ts">
+import router from '@/router';
+import {MenuType} from '@/model/menu'
+
 
 const data = defineProps(['list'])
+
+const goMenu = (i:MenuType) => {
+  router.push(i.router)
+  
+}
 </script>
 
 <template>
@@ -13,7 +21,7 @@ const data = defineProps(['list'])
         <div class="title">{{ item.name }}</div>
         <div class="child">
           <div class="sub" v-for="i in item.children" :key="i.ID">
-            <div class="i">{{ i.name }}</div>
+            <div class="i" @click="goMenu(i)">{{ i.name }}</div>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import { ref } from 'vue'
 
 export const useSystemStore = defineStore('system',() => {
+        const menu = ref([])
         const isLoginPage = ref<boolean>(false)
 
         const changeToLogin = () => {
@@ -12,13 +13,13 @@ export const useSystemStore = defineStore('system',() => {
             isLoginPage.value = true
         }
 
-        return {isLoginPage,changeToLogin,changeBackLogin}
+        return {isLoginPage,changeToLogin,changeBackLogin,menu}
     },
-    // {
-    //     persist: {
-    //         key: 'theme',
-    //         storage: sessionStorage,
-    //     }
+    {
+        persist: {
+            key: 'menu',
+            storage: sessionStorage,
+        }
 
-    // }
+    }
 )

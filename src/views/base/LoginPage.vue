@@ -3,6 +3,9 @@ import {reactive} from 'vue'
 import {login,register} from '@/api/system'
 import {Session} from '@/utils/storage'
 import router from '@/router';
+import {getMenuList} from '@/api/permission'
+import {useSystemStore} from '@/store/system'
+import {AddRoutes} from '@/router'
 
 interface LoginForm {
   username:string,
@@ -14,6 +17,8 @@ interface LoginForm {
 interface Data{
   loginForm:LoginForm
 }
+
+const store = useSystemStore()
 
 const data = reactive<Data>({
   loginForm:{
@@ -27,6 +32,10 @@ const data = reactive<Data>({
 const onFinish = () => {
   login(data.loginForm).then(res => {
     Session.setBase("token",res.token)
+    getMenuList().then(res => {
+      store.menu = res.data
+      AddRoutes(store.menu)
+    })
     router.push('/')
   })
   

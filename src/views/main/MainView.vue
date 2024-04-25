@@ -23,9 +23,8 @@
 import MenuList from '@/components/layout/MenuList.vue';
 import HeaderLine from '@/components/layout/HeaderLine.vue';
 import {ref,onMounted, reactive} from 'vue'
-import {getMenuList} from '@/api/permission'
 import {MenuType} from '@/model/menu'
-import {AddRoutes} from '@/router/index'
+import {useSystemStore} from '@/store/system'
 
 const flag = ref<boolean>(false)
 
@@ -37,18 +36,13 @@ const state = reactive<State>({
   list:[]
 })
 
+const store = useSystemStore()
+
 onMounted(() => {
     if(location.pathname == '/login'){
         flag.value = !flag.value
     }
-    getMenuList().then(res => {
-      state.list = res.data
-      // let a = AddRoutes(state.list)
-      // console.log(a);
-    })
-    
-    
-
+    state.list = store.menu
 })
 
 </script>
