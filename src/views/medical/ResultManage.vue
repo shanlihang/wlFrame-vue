@@ -187,85 +187,52 @@ const columns = [
         title: '姓名',
         key: 'name',
         align:'center',
-        width:130
     },
     {
         title: '身份证号',
         key: 'idnumber',
         align:'center',
-        width:200
+        width:180
     },
     {
         title: '性别',
         key: 'sex',
         align:'center',
-        width:60
     },
     {
         title: '年龄',
         key: 'age',
         align:'center',
-        width:80
-    },
-    {
-        title: '民族',
-        key: 'nation',
-        align:'center',
-        width:100
-    },
-    {
-        title: '出生日期',
-        key: 'birthday',
-        align:'center',
-        width:140
-    },
-    {
-        title: '身高',
-        key: 'height',
-        align:'center',
-        width:100
-    },
-    {
-        title: '体重',
-        key: 'weight',
-        align:'center',
-        width:100
     },
     {
         title: 'BMI',
         key: 'bmi',
         align:'center',
-        width:100
     },
     {
         title: '高压(左)',
         key: 'height',
         align:'center',
-        width:100
     },
     {
         title: '低压(左)',
         key: 'low',
         align:'center',
-        width:100
     },
     {
         title: '心率',
         key: 'rate',
         align:'center',
-        width:100
     },
     {
         title: '高压(右)',
         key: 'rhigh',
         align:'center',
-        width:100
     },
     {
         title: '低压(右)',
         key: 'rlow',
         align:'center',
-        width:100
     },
     {
         title: '操作',
@@ -338,19 +305,6 @@ const columns = [
                 </template>
                 <template v-else-if="column.key === 'age'">
                     {{ record.sfz.age }}
-                </template>
-                
-                <template v-else-if="column.key === 'nation'">
-                    {{ record.sfz.nation }}
-                </template>
-                <template v-else-if="column.key === 'birthday'">
-                    {{ record.sfz.birthday }}
-                </template>
-                <template v-else-if="column.key === 'height'">
-                    {{ record.hw.height }}
-                </template>
-                <template v-else-if="column.key === 'weight'">
-                    {{ record.hw.weight }}
                 </template>
                 <template v-else-if="column.key === 'bmi'">
                     {{ record.hw.bmi }}
