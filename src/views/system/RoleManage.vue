@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive,onMounted } from 'vue';
+import {getRoleList,deleteRole} from '@/api/role'
+import { message,Modal } from 'ant-design-vue';
 
 interface Table{
     key:string,
@@ -21,26 +23,7 @@ const data = reactive<SearchForm>({
         name:'',
         desc:''
     },
-    table:[
-        {
-            key: '1',
-            name: 'John Brown',
-            desc:'string',
-            created_at:'2024-04-30'
-        },
-        {
-            key: '2',
-            name: 'John Brown',
-            desc:'string',
-            created_at:'2024-04-30'
-        },
-        {
-            key: '3',
-            name: 'John Brown',
-            desc:'string',
-            created_at:'2024-04-30'
-        },
-]
+    table:[]
 })
 
 const columns = [
@@ -68,6 +51,38 @@ const columns = [
         align:'center'
     },
 ];
+
+const handleDelete = (id:number) => {
+    Modal.confirm({
+        title: '删除确认',
+        content: '您确定要删除这条记录吗？',
+        okText:'确定',
+        cancelText:'取消',
+        onOk() {
+            deleteRole(id).then(res => {
+                if(res.rowAffect == 1){
+                    initData()
+                    message.info('删除成功')
+                }
+            })
+        },
+        onCancel() {
+            message.info('取消删除操作')
+        },
+    });
+    
+    
+}
+
+const initData = () => {
+    getRoleList().then(res => {
+        data.table = res.data
+    })
+}
+
+onMounted(() => {
+    initData()
+})
 </script>
 
 <template>
@@ -114,11 +129,11 @@ const columns = [
     </div>
     <div class="table">
         <a-table :columns="columns" :data-source="data.table" size="small">
-            <template #bodyCell="{ column }">
+            <template #bodyCell="{ record,column }">
                 <template v-if="column.key === 'action'">
                     <a-button type="link">详情</a-button>
                     <a-button type="link">编辑</a-button>
-                    <a-button type="link" danger>删除</a-button>
+                    <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button> 
                 </template>
             </template>
         </a-table>
