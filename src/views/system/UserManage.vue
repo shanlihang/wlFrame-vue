@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive,onMounted } from 'vue';
+import {getUserList,deleteUser,addUser} from '@/api/user'
 
 interface Table{
     key:string,
@@ -28,35 +29,7 @@ const data = reactive<SearchForm>({
         phone:'',
         email:''
     },
-    table:[
-        {
-            key: '1',
-            name: 'John Brown',
-            sex: 1,
-            phone: '18348563173',
-            email: 'slh67490009@gmail.com',
-            birthday:'2001-10-25',
-            roles: ['nice', 'developer'],
-        },
-        {
-            key: '2',
-            name: 'John Brown',
-            sex: 1,
-            phone: '18348563173',
-            email: 'slh67490009@gmail.com',
-            birthday:'2001-10-25',
-            roles: ['nice', 'developer'],
-        },
-        {
-            key: '3',
-            name: 'John Brown',
-            sex: 1,
-            phone: '18348563173',
-            email: 'slh67490009@gmail.com',
-            birthday:'2001-10-25',
-            roles: ['nice', 'developer'],
-        },
-]
+    table:[]
 })
 
 const columns = [
@@ -102,6 +75,17 @@ const columns = [
         align:'center'
     },
 ];
+
+const initData = () => {
+    getUserList().then(res => {
+        data.table = res.data
+        
+    })
+}
+
+onMounted(() => {
+    initData()
+})
 </script>
 
 <template>
