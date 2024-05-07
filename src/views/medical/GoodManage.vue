@@ -14,6 +14,7 @@ interface Table{
 }
 
 interface Form{
+    addFlag:boolean,
     searchForm:{
         name:string,
         num:number|undefined,
@@ -21,16 +22,29 @@ interface Form{
         created_at:string,
         updated_at:string
     },
+    addForm:{
+        name:string,
+        remark:string,
+        num:number|undefined,
+        uint:string
+    },
     table:Table[]
 }
 
 const data = reactive<Form>({
+    addFlag:false,
     searchForm:{
         name:'',
         num:undefined,
         remark:'',
         created_at:'',
         updated_at:''
+    },
+    addForm:{
+        name:'',
+        remark:'',
+        num:0,
+        uint:''
     },
     table:[]
 })
@@ -91,8 +105,10 @@ const handleDelete = (id:number) => {
             message.info('取消删除操作')
         },
     });
-    
-    
+}
+
+const handleAddOk = () => {
+    data.addFlag = false
 }
 
 const initData = () => {
@@ -146,7 +162,7 @@ onMounted(() => {
             <a-button class="btn">重置搜索</a-button>
         </div>
         <div class="right">
-            <a-button class="btn" type="primary">新增</a-button>
+            <a-button class="btn" type="primary" @click="data.addFlag=true">新增</a-button>
             <a-button class="btn" type="primary">入库</a-button>
             <a-button class="btn" type="primary">出库</a-button>
         </div>
@@ -166,7 +182,44 @@ onMounted(() => {
             </template>
         </a-table>
     </div>
-    
+    <a-modal v-model:open="data.addFlag" title="修改基础信息" okText="确认" cancelText="取消" @ok="handleAddOk">
+        <a-form
+            style="margin-top: 20px;"
+            :model="data.addForm"
+            name="basic"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 16 }"
+            autocomplete="off"
+        >
+            <a-form-item
+                label="物品名称"
+                name="name"
+                :rules="[{ required: true, message: '物品名称不能为空' }]"
+            >
+                <a-input v-model:value="data.addForm.name" placeholder="请输入物品名称" />
+            </a-form-item>
+            <a-form-item
+                label="物品数量"
+                name="num"
+            >
+                <a-input-number v-model:value="data.addForm.num" :min="0" placeholder="请输入物品数量" />
+            </a-form-item>
+            <a-form-item
+                label="物品单位"
+                name="uint"
+                :rules="[{ required: true, message: '物品单位不能为空' }]"
+            >
+                <a-input v-model:value="data.addForm.uint" placeholder="请输入物品单位" />
+            </a-form-item>
+            <a-form-item
+                label="物品备注"
+                name="remark"
+                :rules="[{ required: true, message: '物品备注不能为空' }]"
+            >
+                <a-input v-model:value="data.addForm.remark" placeholder="请输入物品备注" />
+            </a-form-item>
+        </a-form>
+    </a-modal>
   </div>
 </template>
 
