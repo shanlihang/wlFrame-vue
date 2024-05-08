@@ -141,6 +141,10 @@ const handlePutOk = () => {
     data.putFlag = false
 }
 
+const handleOutOk = () => {
+    data.outFlag = false
+}
+
 const initData = () => {
     getGoodsList().then(res => {
         data.table = res.data;  
@@ -198,7 +202,7 @@ onMounted(() => {
         <div class="right">
             <a-button class="btn" type="primary" @click="data.addFlag=true">新增</a-button>
             <a-button class="btn" type="primary" @click="data.putFlag=true">入库</a-button>
-            <a-button class="btn" type="primary">出库</a-button>
+            <a-button class="btn" type="primary" @click="data.outFlag=true">出库</a-button>
         </div>
         
     </div>
@@ -293,7 +297,7 @@ onMounted(() => {
         </a-form>
     </a-modal>
 
-    <a-modal v-model:open="data.outFlag" title="出库" okText="确认" cancelText="取消" @ok="handlePutOk">
+    <a-modal v-model:open="data.outFlag" title="出库" okText="确认" cancelText="取消" @ok="handleOutOk">
         <a-form
             style="margin-top: 20px;"
             :model="data.outForm"
