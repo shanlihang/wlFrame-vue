@@ -33,6 +33,10 @@ const routes = [
         path:'/result',
         component:() => import('@/views/medical/ResultManage.vue')
     },
+    {
+        path:'/feedBack',
+        component:() => import('@/views/medical/feedBackManage.vue')
+    },
 ]
 
 const router = createRouter({
