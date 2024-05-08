@@ -41,13 +41,13 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to,from,next) => {
-    if(to.path == '/login' || to.path == '/register'){
-        next()
-    }else{
-        Session.get("token") != null ? next() : next('/login')
-    }
-})
+// router.beforeEach((to,from,next) => {
+//     if(to.path == '/login' || to.path == '/register'){
+//         next()
+//     }else{
+//         Session.get("token") != null ? next() : next('/login')
+//     }
+// })
 
 router.afterEach(() => {})
 
