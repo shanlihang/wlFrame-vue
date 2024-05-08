@@ -201,6 +201,7 @@ onMounted(() => {
             <a-form-item
                 label="物品数量"
                 name="num"
+                :rules="[{ required: true, message: '物品数量不能为空' }]"
             >
                 <a-input-number v-model:value="data.addForm.num" :min="0" placeholder="请输入物品数量" />
             </a-form-item>
@@ -214,7 +215,6 @@ onMounted(() => {
             <a-form-item
                 label="物品备注"
                 name="remark"
-                :rules="[{ required: true, message: '物品备注不能为空' }]"
             >
                 <a-input v-model:value="data.addForm.remark" placeholder="请输入物品备注" />
             </a-form-item>
