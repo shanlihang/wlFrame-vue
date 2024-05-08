@@ -15,6 +15,8 @@ interface Table{
 
 interface Form{
     addFlag:boolean,
+    putFlag:boolean,
+    outFlag:boolean,
     searchForm:{
         name:string,
         num:number|undefined,
@@ -28,11 +30,27 @@ interface Form{
         num:number|undefined,
         uint:string
     },
+    putForm:{
+        id:number|undefined,
+        num:number|undefined
+    },
+    outForm:{
+        id:number|undefined,
+        num:number|undefined
+    },
     table:Table[]
 }
 
+const options = [
+    {label:'a',value:1},
+    {label:'b',value:2},
+    {label:'c',value:3}
+]
+
 const data = reactive<Form>({
     addFlag:false,
+    putFlag:false,
+    outFlag:false,
     searchForm:{
         name:'',
         num:undefined,
@@ -45,6 +63,14 @@ const data = reactive<Form>({
         remark:'',
         num:0,
         uint:''
+    },
+    putForm:{
+        id:undefined,
+        num:undefined
+    },
+    outForm:{
+        id:undefined,
+        num:undefined
     },
     table:[]
 })
@@ -111,11 +137,19 @@ const handleAddOk = () => {
     data.addFlag = false
 }
 
+const handlePutOk = () => {
+    data.putFlag = false
+}
+
 const initData = () => {
     getGoodsList().then(res => {
         data.table = res.data;  
     })
 }
+
+
+const handleSearch = () => {}
+const handleChange = () => {}
 
 onMounted(() => {
     initData()
@@ -163,7 +197,7 @@ onMounted(() => {
         </div>
         <div class="right">
             <a-button class="btn" type="primary" @click="data.addFlag=true">新增</a-button>
-            <a-button class="btn" type="primary">入库</a-button>
+            <a-button class="btn" type="primary" @click="data.putFlag=true">入库</a-button>
             <a-button class="btn" type="primary">出库</a-button>
         </div>
         
@@ -182,7 +216,7 @@ onMounted(() => {
             </template>
         </a-table>
     </div>
-    <a-modal v-model:open="data.addFlag" title="修改基础信息" okText="确认" cancelText="取消" @ok="handleAddOk">
+    <a-modal v-model:open="data.addFlag" title="新增物品" okText="确认" cancelText="取消" @ok="handleAddOk">
         <a-form
             style="margin-top: 20px;"
             :model="data.addForm"
@@ -203,7 +237,7 @@ onMounted(() => {
                 name="num"
                 :rules="[{ required: true, message: '物品数量不能为空' }]"
             >
-                <a-input-number v-model:value="data.addForm.num" :min="0" placeholder="请输入物品数量" />
+                <a-input-number v-model:value="data.addForm.num" style="width: 100%;" :min="0" placeholder="请输入物品数量" />
             </a-form-item>
             <a-form-item
                 label="物品单位"
@@ -217,6 +251,82 @@ onMounted(() => {
                 name="remark"
             >
                 <a-input v-model:value="data.addForm.remark" placeholder="请输入物品备注" />
+            </a-form-item>
+        </a-form>
+    </a-modal>
+
+    <a-modal v-model:open="data.putFlag" title="入库" okText="确认" cancelText="取消" @ok="handlePutOk">
+        <a-form
+            style="margin-top: 20px;"
+            :model="data.putForm"
+            name="basic"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 16 }"
+            autocomplete="off"
+        >
+            <a-form-item
+                label="物品"
+                name="name"
+                :rules="[{ required: true, message: '入库操作必须选择物品' }]"
+            >
+            <a-select
+                v-model:value="data.putForm.id"
+                show-search
+                :allow-clear="false"
+                :default-active-first-option="false"
+                :show-arrow="false"
+                :filter-option="false"
+                :not-found-content="null"
+                :options="options"
+                placeholder="请选择要入库的物品"
+                @search="handleSearch"
+                @change="handleChange"
+            ></a-select>
+            </a-form-item>
+            <a-form-item
+                label="物品数量"
+                name="num"
+                :rules="[{ required: true, message: '物品数量不能为空' }]"
+            >
+                <a-input-number v-model:value="data.putForm.num" style="width: 100%;" :min="0" placeholder="请输入物品数量" />
+            </a-form-item>
+        </a-form>
+    </a-modal>
+
+    <a-modal v-model:open="data.outFlag" title="出库" okText="确认" cancelText="取消" @ok="handlePutOk">
+        <a-form
+            style="margin-top: 20px;"
+            :model="data.outForm"
+            name="basic"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 16 }"
+            autocomplete="off"
+        >
+            <a-form-item
+                label="物品"
+                name="name"
+                :rules="[{ required: true, message: '出库操作必须选择物品' }]"
+            >
+            <a-select
+                v-model:value="data.outForm.id"
+                show-search
+                :allow-clear="false"
+                :default-active-first-option="false"
+                :show-arrow="false"
+                :filter-option="false"
+                :not-found-content="null"
+                :options="options"
+                placeholder="请选择要出库的物品"
+                @search="handleSearch"
+                @change="handleChange"
+            ></a-select>
+            </a-form-item>
+            <a-form-item
+                label="物品数量"
+                name="num"
+                :rules="[{ required: true, message: '物品数量不能为空' }]"
+            >
+                <a-input-number v-model:value="data.outForm.num" style="width: 100%;" :min="0" placeholder="请输入物品数量" />
             </a-form-item>
         </a-form>
     </a-modal>
