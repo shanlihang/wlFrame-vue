@@ -30,6 +30,10 @@ const routes = [
         component:() => import('@/views/medical/GoodManage.vue')
     },
     {
+        path:'/people',
+        component:() => import('@/views/medical/PeopleManage.vue')
+    },
+    {
         path:'/result',
         component:() => import('@/views/medical/ResultManage.vue')
     },
