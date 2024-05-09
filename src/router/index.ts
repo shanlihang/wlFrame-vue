@@ -34,6 +34,10 @@ const routes = [
         component:() => import('@/views/medical/PeopleManage.vue')
     },
     {
+        path:'/message',
+        component:() => import('@/views/medical/PushMessage.vue')
+    },
+    {
         path:'/result',
         component:() => import('@/views/medical/ResultManage.vue')
     },
