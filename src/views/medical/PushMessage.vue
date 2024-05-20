@@ -149,7 +149,7 @@ const handleDelete = (id:number) => {
                 <a-col :span="6">
                     <a-form-item
                         label="推送标题"
-                        name="content"
+                        name="title"
                         >
                             <a-input v-model:value="data.searchForm.content" placeholder="请输入标题" />
                     </a-form-item>
@@ -198,11 +198,11 @@ const handleDelete = (id:number) => {
             :wrapper-col="{ span: 16 }"
             autocomplete="off"
         >
-            <a-form-item label="推送标题" name="title">
+            <a-form-item label="推送标题" name="title" :rules="[{ required: true, message: '推送标题不能为空' }]">
                 <a-input v-model:value="data.addForm.title" show-count :maxlength="20" placeholder="请输入推送标题" />
             </a-form-item>
             
-            <a-form-item label="推送内容" name="content">
+            <a-form-item label="推送内容" name="content" :rules="[{ required: true, message: '文章内容不能为空' }]">
                 <a-textarea v-model:value="data.addForm.content" show-count :maxlength="240" placeholder="请输入推送内容" />
             </a-form-item>
         </a-form>
@@ -217,11 +217,11 @@ const handleDelete = (id:number) => {
             :wrapper-col="{ span: 16 }"
             autocomplete="off"
         >
-            <a-form-item label="推送标题" name="title">
+            <a-form-item label="推送标题" name="title" :rules="[{ required: true, message: '推送标题不能为空' }]">
                 <a-input v-model:value="data.updateForm.title" show-count :maxlength="20" placeholder="请输入推送标题" />
             </a-form-item>
             
-            <a-form-item label="推送内容" name="content">
+            <a-form-item label="推送内容" name="content" :rules="[{ required: true, message: '文章内容不能为空' }]">
                 <a-textarea v-model:value="data.updateForm.content" show-count :maxlength="20" placeholder="请输入推送内容" />
             </a-form-item>
         </a-form>
