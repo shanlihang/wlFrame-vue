@@ -12,24 +12,46 @@ interface Table{
     roles:string[],
 }
 
+interface AddForm{
+    key:string,
+    name:string,
+    sex:number,
+    phone:string,
+    email:string,
+    birthday:string,
+    roles:string[],
+}
+
 interface SearchForm{
+    addModal:boolean,
     searchForm:{
         name:string,
         sex:number|undefined,
         phone:string,
         email:string
     },
-    table:Table[]
+    table:Table[],
+    addForm:AddForm
 }
 
 const data = reactive<SearchForm>({
+    addModal:false,
     searchForm:{
         name:'',
         sex:undefined,
         phone:'',
         email:''
     },
-    table:[]
+    table:[],
+    addForm:{
+        key:'',
+        name:'',
+        sex:0,
+        phone:'',
+        email:'',
+        birthday:'',
+        roles:[],
+    }
 })
 
 const columns = [
@@ -82,6 +104,8 @@ const initData = () => {
         
     })
 }
+
+const handleBaseOk = () => {}
 
 onMounted(() => {
     initData()
@@ -148,7 +172,7 @@ onMounted(() => {
             <a-button class="btn">重置搜索</a-button>
         </div>
         
-        <a-button class="btn" type="primary">新增</a-button>
+        <a-button class="btn" type="primary" @click="data.addModal=true">新增</a-button>
     </div>
     <div class="table">
         <a-table :columns="columns" :data-source="data.table" size="small">
@@ -177,6 +201,60 @@ onMounted(() => {
         </a-table>
     </div>
     
+    <a-modal v-model:open="data.addModal" title="新增用户信息" okText="确认" cancelText="取消" @ok="handleBaseOk">
+        <a-form
+            style="margin-top: 20px;"
+            :model="data.addForm"
+            name="basic"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 16 }"
+            autocomplete="off"
+        >
+            <a-form-item
+                label="姓名"
+                name="name"
+                :rules="[{ required: true, message: '姓名不能为空' }]"
+                >
+                <a-input v-model:value="data.addForm.name" placeholder="请输入姓名" />
+            </a-form-item>
+            <a-form-item
+                label="性别"
+                name="sex"
+                :rules="[{ required: true, message: '性别不能为空' }]"
+                >
+                <a-select
+                    v-model:value="data.addForm.sex"
+                    style="width: 120px"
+                    placeholder="请选择性别"
+                    >
+                    <a-select-option :value="1">男</a-select-option>
+                    <a-select-option :value="0">女</a-select-option>
+                </a-select>
+            </a-form-item>
+            <a-form-item
+                label="电话"
+                name="phone"
+                :rules="[{ required: true, message: '电话不能为空' }]"
+                >
+                <a-input v-model:value="data.addForm.phone" placeholder="请输入电话" />
+            </a-form-item>
+            <a-form-item
+                label="邮箱"
+                name="email"
+                :rules="[{ required: true, message: '邮箱不能为空' }]"
+                >
+                <a-input v-model:value="data.addForm.email" placeholder="请输入邮箱" />
+            </a-form-item>
+            <!-- <a-form-item
+                label="生日"
+                name="birthday"
+                format="YYYY/MM/DD"
+                :rules="[{ required: true, message: '请选择你的出生日期' }]"
+                >
+                <a-date-picker v-model:value="data.addForm.birthday" />
+            </a-form-item> -->
+        </a-form>
+    </a-modal>
   </div>
 </template>
 
