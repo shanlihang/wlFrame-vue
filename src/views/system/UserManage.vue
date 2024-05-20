@@ -22,7 +22,7 @@ interface AddForm{
     roles:string[],
 }
 
-interface SearchForm{
+interface Data{
     addModal:boolean,
     searchForm:{
         name:string,
@@ -34,7 +34,7 @@ interface SearchForm{
     addForm:AddForm
 }
 
-const data = reactive<SearchForm>({
+const data = reactive<Data>({
     addModal:false,
     searchForm:{
         name:'',
