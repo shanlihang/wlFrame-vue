@@ -4,26 +4,34 @@ import {getRoleList,deleteRole} from '@/api/role'
 import { message,Modal } from 'ant-design-vue';
 
 interface Table{
-    key:string,
+    key?:string,
     name:string,
     desc:string,
-    created_at:string
+    created_at?:string
 }
 
-interface SearchForm{
+interface Data{
+    addModal:boolean,
     searchForm:{
         name:string,
         desc:string,
     },
-    table:Table[]
+    table:Table[],
+    addForm:Table
 }
 
-const data = reactive<SearchForm>({
+const data = reactive<Data>({
+    addModal:false,
     searchForm:{
         name:'',
         desc:''
     },
-    table:[]
+    table:[],
+    addForm:{
+        name:'',
+        desc:'',
+    }
+    
 })
 
 const columns = [
@@ -80,6 +88,8 @@ const initData = () => {
     })
 }
 
+const handleBaseOk = () => {}
+
 onMounted(() => {
     initData()
 })
@@ -125,7 +135,7 @@ onMounted(() => {
             <a-button class="btn">重置搜索</a-button>
         </div>
         
-        <a-button class="btn" type="primary">新增</a-button>
+        <a-button class="btn" type="primary" @click="data.addModal=true">新增</a-button>
     </div>
     <div class="table">
         <a-table :columns="columns" :data-source="data.table" size="small">
@@ -138,7 +148,31 @@ onMounted(() => {
             </template>
         </a-table>
     </div>
-    
+    <a-modal v-model:open="data.addModal" title="新增角色信息" okText="确认" cancelText="取消" @ok="handleBaseOk">
+        <a-form
+            style="margin-top: 20px;"
+            :model="data.addForm"
+            name="basic"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 16 }"
+            autocomplete="off"
+        >
+            <a-form-item
+                label="角色名称"
+                name="name"
+                :rules="[{ required: true, message: '角色名称不能为空' }]"
+                >
+                <a-input v-model:value="data.addForm.name" placeholder="请输入角色名称" />
+            </a-form-item>
+            <a-form-item
+                label="角色描述"
+                name="desc"
+                :rules="[{ required: true, message: '角色描述不能为空' }]"
+                >
+                <a-textarea :auto-size="{ minRows: 2, maxRows: 5 }" v-model:value="data.addForm.desc" placeholder="请输入角色描述" />
+            </a-form-item>
+        </a-form>
+    </a-modal>
   </div>
 </template>
 
