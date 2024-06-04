@@ -155,6 +155,12 @@ const clearAddModal = () => {
     data.tips = []
 }
 
+const resetSearch = () => {
+    data.searchForm.name = ''
+    data.searchForm.district = ''
+    data.searchForm.detail_address = ''
+}
+
 const openDetailDrawer = (record:TableData) => {
     console.log(record);
     
@@ -243,7 +249,7 @@ onMounted(() => {
     <div class="handle">
         <div class="left">
             <a-button class="btn" type="primary">搜索</a-button>
-            <a-button class="btn">重置搜索</a-button>
+            <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
         <div class="right">
             <a-button class="btn" type="primary" @click="data.addFlag=true">新增</a-button>
