@@ -45,6 +45,10 @@ const routes = [
         path:'/feedBack',
         component:() => import('@/views/medical/feedBackManage.vue')
     },
+    {
+        path:'/community',
+        component:() => import('@/views/medical/communityManage.vue')
+    },
 ]
 
 const router = createRouter({
@@ -61,7 +65,7 @@ const router = createRouter({
 //     }
 // })
 
-router.afterEach(() => {})
+// router.afterEach(() => {})
 
 
 
