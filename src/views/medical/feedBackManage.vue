@@ -3,17 +3,27 @@ import {reactive} from 'vue'
 import { Dayjs } from 'dayjs';
 type RangeValue = [Dayjs, Dayjs];
 
+interface Table{
+    ID?:number,
+    content:string,
+    status:number,
+    CreatedAt?:string,
+    UpdatedAt?:string,
+    DeletedAt?:string,
+}
+
 interface Data{
     searchForm:{
         content:string,
-        time?:RangeValue
+        status:number|undefined
     },
-    table:Array<any>
+    table:Array<Table>
 }
 
 const data = reactive<Data>({
     searchForm:{
         content:'',
+        status:undefined
     },
     table:[]
 })
@@ -27,22 +37,22 @@ const columns = [
     },
     {
         title: '处理状态',
-        key: 'isFinish',
-        dataIndex: 'isFinish',
+        key: 'status',
+        dataIndex: 'status',
         align:'center',
         width:'100px'
     },
     {
         title: '反馈时间',
-        dataIndex: 'time',
-        key: 'time',
+        dataIndex: 'CreatedAt',
+        key: 'CreatedAt',
         align:'center',
         width:'200px'
     },
     {
         title: '反馈人',
-        dataIndex: 'person',
-        key: 'person',
+        dataIndex: 'personId',
+        key: 'personId',
         align:'center',
         width:'200px'
     },
