@@ -8,7 +8,6 @@ export function getGoodsList(){
     })
 }
 
-
 // 新增物品
 export function addGoods(data:object){
     return request({

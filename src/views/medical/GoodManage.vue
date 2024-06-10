@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { reactive,onMounted } from 'vue';
-import {getGoodsList,deleteGoods} from '@/api/goods'
+import {getGoodsList,deleteGoods,addGoods} from '@/api/goods'
 import {message,Modal} from 'ant-design-vue'
 
 interface Table{
+    ID?:number,
     key:string,
     name:string,
     num:number|undefined,
@@ -15,14 +16,22 @@ interface Table{
 
 interface Form{
     addFlag:boolean,
+    updateFlag:boolean,
     putFlag:boolean,
     outFlag:boolean,
     searchForm:{
         name:string,
-        num:number|undefined,
         remark:string,
-        created_at:string,
-        updated_at:string
+    },
+    updateForm:{
+        ID?:number|undefined,
+        name:string,
+        remark:string,
+        num?:number|undefined,
+        uint?:string,
+        CreatedAt?:string,
+        UpdatedAt?:string,
+        DeletedAt?:string
     },
     addForm:{
         name:string,
@@ -49,14 +58,16 @@ const options = [
 
 const data = reactive<Form>({
     addFlag:false,
+    updateFlag:false,
     putFlag:false,
     outFlag:false,
     searchForm:{
         name:'',
-        num:undefined,
         remark:'',
-        created_at:'',
-        updated_at:''
+    },
+    updateForm:{
+        name:'',
+        remark:'',
     },
     addForm:{
         name:'',
@@ -134,15 +145,44 @@ const handleDelete = (id:number) => {
 }
 
 const handleAddOk = () => {
-    data.addFlag = false
+    addGoods(data.addForm).then(res => {
+        if(res.rowAffect == 1){
+            data.addFlag = false
+            message.success('新增成功')
+            initData()
+        }
+        resetAdd()
+    })
+}
+
+const handleUpdate = (record) => {
+    console.log(record);
+    
+    data.updateForm = record
+    data.updateFlag = true
 }
 
 const handlePutOk = () => {
     data.putFlag = false
+    console.log(data.putForm);
+    
 }
 
 const handleOutOk = () => {
     data.outFlag = false
+    console.log(data.outForm);
+}
+
+const resetSearch = () => {
+    data.searchForm.name='',
+    data.searchForm.remark=''
+}
+
+const resetAdd = () => {
+    data.addForm.name='',
+    data.addForm.remark='',
+    data.addForm.num=0,
+    data.addForm.uint=''
 }
 
 const initData = () => {
@@ -151,9 +191,12 @@ const initData = () => {
     })
 }
 
+const handleUpdateOk = () => {
+    console.log(data.updateForm);
+    data.updateFlag = false
+    
+}
 
-const handleSearch = () => {}
-const handleChange = () => {}
 
 onMounted(() => {
     initData()
@@ -197,7 +240,7 @@ onMounted(() => {
     <div class="handle">
         <div class="left">
             <a-button class="btn" type="primary">搜索</a-button>
-            <a-button class="btn">重置搜索</a-button>
+            <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>
         <div class="right">
             <a-button class="btn" type="primary" @click="data.addFlag=true">新增</a-button>
@@ -210,8 +253,8 @@ onMounted(() => {
         <a-table :columns="columns" :data-source="data.table" size="small">
             <template #bodyCell="{ record,column }">
                 <template v-if="column.key === 'action'">
-                    <a-button type="link">详情</a-button>
-                    <a-button type="link">编辑</a-button>
+                    <!-- <a-button type="link">记录</a-button> -->
+                    <a-button type="link" @click="handleUpdate(record)">编辑</a-button>
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
                 <template v-else-if="column.key === 'num'">
@@ -259,6 +302,31 @@ onMounted(() => {
         </a-form>
     </a-modal>
 
+    <a-modal v-model:open="data.updateFlag" title="修改物品信息" okText="确认" cancelText="取消" @ok="handleUpdateOk">
+        <a-form
+            style="margin-top: 20px;"
+            :model="data.updateForm"
+            name="basic"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 16 }"
+            autocomplete="off"
+        >
+            <a-form-item
+                label="物品名称"
+                name="name"
+                :rules="[{ required: true, message: '物品名称不能为空' }]"
+            >
+                <a-input v-model:value="data.updateForm.name" placeholder="请输入物品名称" />
+            </a-form-item>
+            <a-form-item
+                label="物品备注"
+                name="remark"
+            >
+                <a-input v-model:value="data.updateForm.remark" placeholder="请输入物品备注" />
+            </a-form-item>
+        </a-form>
+    </a-modal>
+
     <a-modal v-model:open="data.putFlag" title="入库" okText="确认" cancelText="取消" @ok="handlePutOk">
         <a-form
             style="margin-top: 20px;"
@@ -275,17 +343,10 @@ onMounted(() => {
             >
             <a-select
                 v-model:value="data.putForm.id"
-                show-search
-                :allow-clear="false"
-                :default-active-first-option="false"
-                :show-arrow="false"
-                :filter-option="false"
-                :not-found-content="null"
-                :options="options"
                 placeholder="请选择要入库的物品"
-                @search="handleSearch"
-                @change="handleChange"
-            ></a-select>
+            >
+               <a-select-option v-for="item in data.table" :value="item.ID">{{ item.name }}</a-select-option>
+            </a-select>
             </a-form-item>
             <a-form-item
                 label="物品数量"
@@ -313,17 +374,10 @@ onMounted(() => {
             >
             <a-select
                 v-model:value="data.outForm.id"
-                show-search
-                :allow-clear="false"
-                :default-active-first-option="false"
-                :show-arrow="false"
-                :filter-option="false"
-                :not-found-content="null"
-                :options="options"
                 placeholder="请选择要出库的物品"
-                @search="handleSearch"
-                @change="handleChange"
-            ></a-select>
+            >
+                <a-select-option v-for="item in data.table" :value="item.ID">{{ item.name }}</a-select-option>
+            </a-select>
             </a-form-item>
             <a-form-item
                 label="物品数量"
