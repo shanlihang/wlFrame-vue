@@ -250,14 +250,12 @@ onMounted(() => {
             <a-button class="btn">重置搜索</a-button>
         </div>
         
-        <a-button class="btn" type="primary">新增</a-button>
     </div>
     <div class="table">
         <a-table :columns="columns" :data-source="data.table" size="small" :scroll="{x:1000}">
             <template #bodyCell="{ record,column }">
                 <template v-if="column.key === 'action'">
                     <a-button type="link">详情</a-button>
-                    <a-button type="link">编辑</a-button>
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
                 <template v-else-if="column.key === 'name'">

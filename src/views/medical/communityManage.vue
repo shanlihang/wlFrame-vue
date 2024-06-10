@@ -131,11 +131,16 @@ const change = () => {
 const addCommunityOk = () => {
     insertCommunity(data.tempAddress).then(res => {
         if(res.rowAffect == 1){
+            message.success('新增成功')
             initData()
-            data.addFlag = false;
-            clearAddModal();
         }
+    }).catch(() => {
+        message.error('地址不可用 请重新选择')
+    }).finally(() => {
+        clearAddModal();
+        data.addFlag = false;
     })
+    
 };
 
 //新增社区弹窗取消事件
