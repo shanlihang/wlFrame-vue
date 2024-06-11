@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive,onMounted } from 'vue';
-import {getGoodsList,deleteGoods,addGoods} from '@/api/goods'
+import {getGoodsList,deleteGoods,addGoods,updateGoods,putGood,OutGood} from '@/api/goods'
 import {message,Modal} from 'ant-design-vue'
 
 interface Table{
@@ -20,8 +20,8 @@ interface Form{
     putFlag:boolean,
     outFlag:boolean,
     searchForm:{
-        name:string,
-        remark:string,
+        name:string|undefined,
+        remark:string|undefined,
     },
     updateForm:{
         ID?:number|undefined,
@@ -50,20 +50,14 @@ interface Form{
     table:Table[]
 }
 
-const options = [
-    {label:'a',value:1},
-    {label:'b',value:2},
-    {label:'c',value:3}
-]
-
 const data = reactive<Form>({
     addFlag:false,
     updateFlag:false,
     putFlag:false,
     outFlag:false,
     searchForm:{
-        name:'',
-        remark:'',
+        name:undefined,
+        remark:undefined,
     },
     updateForm:{
         name:'',
@@ -107,14 +101,14 @@ const columns = [
     },
     {
         title: '创建时间',
-        key: 'created_at',
-        dataIndex: 'created_at',
+        key: 'CreatedAt',
+        dataIndex: 'CreatedAt',
         align:'center'
     },
     {
         title: '更新时间',
-        key: 'updated_at',
-        dataIndex: 'updated_at',
+        key: 'UpdatedAt',
+        dataIndex: 'UpdatedAt',
         align:'center'
     },
     {
@@ -156,26 +150,36 @@ const handleAddOk = () => {
 }
 
 const handleUpdate = (record) => {
-    console.log(record);
-    
     data.updateForm = record
     data.updateFlag = true
 }
 
 const handlePutOk = () => {
-    data.putFlag = false
-    console.log(data.putForm);
-    
+    putGood(data.putForm).then(res => {
+        if(res.rowAffect != 0){
+            data.putFlag = false
+            message.success('入库完成')
+            initData()
+        }
+    })
 }
 
 const handleOutOk = () => {
-    data.outFlag = false
-    console.log(data.outForm);
+    OutGood(data.outForm).then(res => {
+        if(res.rowAffect != 0){
+            data.outFlag = false
+            message.success('出库完成')
+            initData()
+        }else{
+            message.error('出库数量大于库存数量')
+        }
+    })
 }
 
 const resetSearch = () => {
-    data.searchForm.name='',
-    data.searchForm.remark=''
+    data.searchForm.name=undefined,
+    data.searchForm.remark=undefined
+    initData()
 }
 
 const resetAdd = () => {
@@ -185,16 +189,24 @@ const resetAdd = () => {
     data.addForm.uint=''
 }
 
+const handleSearch = () => {
+    initData()
+}
+
 const initData = () => {
-    getGoodsList().then(res => {
+    getGoodsList(data.searchForm).then(res => {
         data.table = res.data;  
     })
 }
 
 const handleUpdateOk = () => {
-    console.log(data.updateForm);
-    data.updateFlag = false
-    
+    updateGoods(data.updateForm).then(res => {
+        if(res.rowAffect != 0){
+            data.updateFlag = false
+            message.success('修改成功')
+            initData()
+        }
+    })
 }
 
 
@@ -239,7 +251,7 @@ onMounted(() => {
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
             <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>
         <div class="right">
@@ -317,6 +329,13 @@ onMounted(() => {
                 :rules="[{ required: true, message: '物品名称不能为空' }]"
             >
                 <a-input v-model:value="data.updateForm.name" placeholder="请输入物品名称" />
+            </a-form-item>
+            <a-form-item
+                label="物品单位"
+                name="uint"
+                :rules="[{ required: true, message: '物品单位不能为空' }]"
+            >
+                <a-input v-model:value="data.updateForm.uint" placeholder="请输入物品单位" />
             </a-form-item>
             <a-form-item
                 label="物品备注"
