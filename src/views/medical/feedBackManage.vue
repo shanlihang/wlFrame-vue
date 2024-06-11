@@ -60,7 +60,7 @@ const columns = [
         title: '操作',
         key: 'action',
         align:'center',
-        width:'100px'
+        width:'150px'
     },
 ];
 

@@ -32,9 +32,9 @@ interface TableData{
 
 //搜索表单接口定义
 interface SearchForm{
-    name:string,
-    district:string,
-    detail_address:string,
+    name:string|undefined,
+    district:string|undefined,
+    detail_address:string|undefined,
 }
 
 interface Data{
@@ -55,9 +55,9 @@ const data = reactive<Data>({
     updateFlag:false,
     detailFlag:false,
     searchForm:{
-        name:'',
-        district:'',
-        detail_address:'',
+        name:undefined,
+        district:undefined,
+        detail_address:undefined,
     },
     table:[],
     tips:[],
@@ -160,10 +160,15 @@ const clearAddModal = () => {
     data.tips = []
 }
 
+const handleSearch = () => {
+    initData()
+}
+
 const resetSearch = () => {
-    data.searchForm.name = ''
-    data.searchForm.district = ''
-    data.searchForm.detail_address = ''
+    data.searchForm.name = undefined
+    data.searchForm.district = undefined
+    data.searchForm.detail_address = undefined
+    initData()
 }
 
 const openDetailDrawer = (record:TableData) => {
@@ -200,7 +205,7 @@ const handleDelete = (id:number) => {
 }
 
 const initData = () => {
-    selectCommunity().then(res => {
+    selectCommunity(data.searchForm).then(res => {
         data.table = res.data
         
     })
@@ -224,7 +229,7 @@ onMounted(() => {
             <a-row align="middle" justify="center">
                 <a-col :span="6">
                     <a-form-item
-                        label="物品名称"
+                        label="社区名称"
                         name="name"
                         >
                             <a-input v-model:value="data.searchForm.name" placeholder="请输入社区名称" />
@@ -253,7 +258,7 @@ onMounted(() => {
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
             <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
         <div class="right">
