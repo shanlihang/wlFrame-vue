@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import {reactive} from 'vue'
-
+import {onMounted, reactive} from 'vue'
+import {deletePeopleById,selectPeople,insertPeople} from '@/api/people'
 import {message,Modal} from 'ant-design-vue'
 
 interface Record{
     name:string;
-    sex:number|undefined;
-    nation:string;
-    birthday:string;
+    sex:string;
+    nation?:string;
+    birthday?:string;
     idnumber:string;
-    phone:string;
+    phone?:string;
+    email?:string
 }
 
 interface Data{
@@ -26,46 +27,28 @@ const data = reactive<Data>({
     updateFlag:false,
     searchForm:{
         name:'',
-        sex:undefined,
-        nation:'',
-        birthday:'',
+        sex:'',
         idnumber:'',
         phone:''
     },
     addForm:{
         name:'',
-        sex:undefined,
+        sex:'',
+        nation:'',
+        birthday:'',
+        idnumber:'',
+        phone:'',
+        email:''
+    },
+    updateForm:{
+        name:'',
+        sex:'',
         nation:'',
         birthday:'',
         idnumber:'',
         phone:''
     },
-    updateForm:{
-        name:'',
-        sex:undefined,
-        nation:'',
-        birthday:'',
-        idnumber:'',
-        phone:''
-    }
-    ,
-    table:[
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-        {name:'Lily',sex:0,nation:'汉族',birthday:'2001-02-04',idnumber:'13266',phone:'65161616'},
-    ]
+    table:[]
 })
 
 const columns = [
@@ -106,6 +89,12 @@ const columns = [
         align:'center',
     },
     {
+        title: '邮箱',
+        dataIndex: 'email',
+        key: 'email',
+        align:'center',
+    },
+    {
         title: '操作',
         key: 'action',
         align:'center',
@@ -113,7 +102,35 @@ const columns = [
     },
 ];
 
-const handleAddOk = () => {}
+const resetSearch = () => {
+    data.searchForm.name='',
+    data.searchForm.sex='',
+    data.searchForm.idnumber='',
+    data.searchForm.phone=''
+}
+
+const resetAdd = () => {
+    data.addForm.name='',
+    data.addForm.sex='',
+    data.addForm.nation='',
+    data.addForm.birthday='',
+    data.addForm.idnumber='',
+    data.addForm.phone='',
+    data.addForm.email=''
+}
+
+const handleAddOk = () => {
+    insertPeople(data.addForm).then(res => {
+        if(res.rowAffect == 1){
+            message.success('新增成功')
+            initData()
+        }
+    })
+    data.addFlag = false
+    resetAdd()
+}
+
+const handleUpdateOk = () => {}
 
 const handleUpdate = (record:Record) => {
     data.updateForm = record
@@ -127,19 +144,28 @@ const handleDelete = (id:number) => {
         okText:'确定',
         cancelText:'取消',
         onOk() {
-            // deleteGoods(id).then(res => {
-            //     if(res.rowAffect == 1){
-            //         initData()
-            //         message.success('删除成功')
-            //     }
-            // })
-            message.success('删除成功')
+            deletePeopleById(id).then(res => {
+                if(res.rowAffect == 1){
+                    message.success('删除成功')
+                    initData()
+                }
+            })
         },
         onCancel() {
             message.info('取消删除操作')
         },
     });
 }
+
+const initData = () => {
+    selectPeople().then(res => {
+        data.table = res.data
+    })
+}
+
+onMounted(() => {
+    initData()
+})
 </script>
 
 <template>
@@ -171,36 +197,10 @@ const handleDelete = (id:number) => {
                                 v-model:value="data.searchForm.sex"
                                 placeholder="请选择居民性别"
                                 >
-                                <a-select-option :value="1">男</a-select-option>
-                                <a-select-option :value="0">女</a-select-option>
+                                <a-select-option value="男">男</a-select-option>
+                                <a-select-option value="女">女</a-select-option>
                             </a-select>
                         </a-form-item>
-                </a-col>
-                <a-col :span="6">
-                    <a-form-item
-                        label="居民民族"
-                        name="nation"
-                        >
-                            <a-input v-model:value="data.searchForm.nation" placeholder="请输入居民民族" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="6">
-                    <a-form-item
-                        label="出生日期"
-                        name="birthday"
-                        >
-                            <a-range-picker v-model:value="data.searchForm.birthday" :placeholder="['开始时间', '结束时间']" />
-                        </a-form-item>
-                </a-col>
-            </a-row>
-            <a-row align="middle" justify="center">
-                <a-col :span="6">
-                    <a-form-item
-                        label="身份证号"
-                        name="idnumber"
-                        >
-                            <a-input v-model:value="data.searchForm.idnumber" placeholder="请输入居民身份证号" />
-                    </a-form-item>
                 </a-col>
                 <a-col :span="6">
                     <a-form-item
@@ -210,8 +210,14 @@ const handleDelete = (id:number) => {
                             <a-input v-model:value="data.searchForm.phone" placeholder="请输入居民手机号" />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6"></a-col>
-                <a-col :span="6"></a-col>
+                <a-col :span="6">
+                    <a-form-item
+                        label="身份证号"
+                        name="idnumber"
+                        >
+                            <a-input v-model:value="data.searchForm.idnumber" placeholder="请输入居民身份证号" />
+                    </a-form-item>
+                </a-col>
             </a-row>
         </a-form>
 
@@ -219,7 +225,7 @@ const handleDelete = (id:number) => {
     <div class="handle">
         <div class="left">
             <a-button class="btn" type="primary">搜索</a-button>
-            <a-button class="btn">重置搜索</a-button>
+            <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
         <div class="right">
             <a-button class="btn" type="primary" @click="data.addFlag=true">新增</a-button>
@@ -233,7 +239,7 @@ const handleDelete = (id:number) => {
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
                 <template v-else-if="column.key === 'sex'">
-                    <a-tag>{{ record.sex == 0 ? '女' : '男' }}</a-tag>
+                    <a-tag>{{ record.sex }}</a-tag>
                 </template>
             </template>
         </a-table>
@@ -252,9 +258,9 @@ const handleDelete = (id:number) => {
                     <a-input v-model:value="data.addForm.name" placeholder="请输入居民姓名" />
             </a-form-item>
             <a-form-item label="居民性别" name="sex">
-                <a-select ref="select" v-model:value="data.addForm.sex" placeholder="请选择居民性别">
-                    <a-select-option :value="1">男</a-select-option>
-                    <a-select-option :value="0">女</a-select-option>
+                <a-select v-model:value="data.addForm.sex" placeholder="请选择居民性别">
+                    <a-select-option value="男">男</a-select-option>
+                    <a-select-option value="女">女</a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="居民民族" name="nation">
@@ -269,10 +275,13 @@ const handleDelete = (id:number) => {
             <a-form-item label="手机号" name="phone">
                 <a-input v-model:value="data.addForm.phone" placeholder="请输入居民手机号" />
             </a-form-item>
+            <a-form-item label="邮箱" name="email">
+                <a-input v-model:value="data.addForm.email" placeholder="请输入居民邮箱" />
+            </a-form-item>
         </a-form>
     </a-modal>
 
-    <a-modal v-model:open="data.updateFlag" title="修改居民" okText="确认" cancelText="取消" @ok="handleAddOk">
+    <a-modal v-model:open="data.updateFlag" title="修改居民" okText="确认" cancelText="取消" @ok="handleUpdateOk">
         <a-form
             style="margin-top: 20px;"
             :model="data.updateForm"
@@ -285,7 +294,7 @@ const handleDelete = (id:number) => {
                     <a-input v-model:value="data.updateForm.name" placeholder="请输入居民姓名" />
             </a-form-item>
             <a-form-item label="居民性别" name="sex">
-                <a-select ref="select" v-model:value="data.updateForm.sex" placeholder="请选择居民性别">
+                <a-select v-model:value="data.updateForm.sex" placeholder="请选择居民性别">
                     <a-select-option :value="1">男</a-select-option>
                     <a-select-option :value="0">女</a-select-option>
                 </a-select>
