@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {reactive} from 'vue'
-import { Dayjs } from 'dayjs';
-type RangeValue = [Dayjs, Dayjs];
+import {reactive,onMounted} from 'vue'
+import {selectFeedback,deleteFeedbackById} from '@/api/feedback'
+import {message,Modal} from 'ant-design-vue'
 
 interface Table{
     ID?:number,
@@ -64,6 +64,42 @@ const columns = [
     },
 ];
 
+const resetSearch = () => {
+    data.searchForm.content = '',
+    data.searchForm.status = undefined
+}
+
+const handleDelete = (id:number) => {
+    Modal.confirm({
+        title: '删除确认',
+        content: '您确定要删除这条记录吗？',
+        okText:'确定',
+        cancelText:'取消',
+        onOk() {
+            deleteFeedbackById(id).then(res => {
+                if(res.rowAffect == 1){
+                    message.success('删除成功')
+                    initData()
+                }
+            })
+        },
+        onCancel() {
+            message.info('取消删除操作')
+        },
+    });
+}
+
+const initData = () => {
+    selectFeedback().then(res => {
+        data.table = res.data
+        
+    })
+}
+
+onMounted(() => {
+    initData()
+})
+
 </script>
 
 <template>
@@ -87,10 +123,17 @@ const columns = [
                 </a-col>
                 <a-col :span="6">
                     <a-form-item
-                        label="反馈时间"
-                        name="time"
+                        label="反馈状态"
+                        name="status"
                         >
-                            <a-range-picker v-model:value="data.searchForm.time" show-time style="width: 400px;" :placeholder="['开始时间', '结束时间']" />
+                        <a-select
+                            ref="select"
+                            v-model:value="data.searchForm.status"
+                            placeholder="请选择反馈状态"
+                        >
+                            <a-select-option :value="0">未处理</a-select-option>
+                            <a-select-option :value="1">已处理</a-select-option>
+                        </a-select>
                         </a-form-item>
                 </a-col>
                 <a-col :span="6"></a-col>
@@ -103,17 +146,18 @@ const columns = [
     <div class="handle">
         <div class="left">
             <a-button class="btn" type="primary">搜索</a-button>
-            <a-button class="btn">重置搜索</a-button>
+            <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
     </div>
     <div class="table">
         <a-table :columns="columns" :data-source="data.table" size="small">
             <template #bodyCell="{ record,column }">
                 <template v-if="column.key === 'action'">
-                    <a-button type="link">完成</a-button>
+                    <a-button v-if="record.status==0" type="link">完成</a-button>
+                    <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
-                <template v-else-if="column.key === 'isFinish'">
-                    {{record.isFinish==0?'未处理':'已处理'}}
+                <template v-else-if="column.key === 'status'">
+                    <a-tag :color="record.status==0?'warning':'success'">{{record.status==0?'未处理':'已处理'}}</a-tag>
                 </template>
             </template>
         </a-table>
