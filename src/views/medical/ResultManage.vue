@@ -103,8 +103,10 @@ export interface Xt {
 interface SearchForm{
     detailFlag:boolean,
     searchForm:{
-        name:string,
-        idnumber:string,
+        name:string|undefined,
+        idnumber:string|undefined,
+        examNo:string|undefined,
+        deviceID:string|undefined
     },
     table:Result[],
     detail:Result
@@ -113,8 +115,10 @@ interface SearchForm{
 const data = reactive<SearchForm>({
     detailFlag:false,
     searchForm:{
-        name:'',
-        idnumber:''
+        name:undefined,
+        idnumber:undefined,
+        examNo:undefined,
+        deviceID:undefined
     },
     table:[],
     detail:{}
@@ -203,6 +207,18 @@ const handleDelete = (id:number) => {
     });
 }
 
+const handleSearch = () => {
+    initData()
+}
+
+const resetSearch = () => {
+    data.searchForm.name=undefined,
+    data.searchForm.idnumber=undefined
+    data.searchForm.examNo=undefined
+    data.searchForm.deviceID=undefined
+    initData()
+}
+
 const showDetail = (item:Result) => {
     data.detailFlag = true
     data.detail = item
@@ -213,7 +229,7 @@ const onClose = () => {
 };
 
 const initData = () => {
-    getResultList().then(res => {
+    getResultList(data.searchForm).then(res => {
         data.table = res.data
     })
 }
@@ -236,11 +252,19 @@ onMounted(() => {
             <a-row align="middle" justify="center">
                 <a-col :span="6">
                     <a-form-item
+                        label="体检编号"
+                        name="examNo"
+                        >
+                            <a-input v-model:value="data.searchForm.examNo" placeholder="请输入体检编号" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="6">
+                    <a-form-item
                         label="姓名"
                         name="name"
                         >
                             <a-input v-model:value="data.searchForm.name" placeholder="请输入姓名" />
-                        </a-form-item>
+                    </a-form-item>
                 </a-col>
                 <a-col :span="6">
                     <a-form-item
@@ -248,10 +272,17 @@ onMounted(() => {
                         name="idnumber"
                         >
                             <a-input v-model:value="data.searchForm.idnumber" placeholder="请输入身份证号" />
-                        </a-form-item>
+                    </a-form-item>
                 </a-col>
-                <a-col :span="6"></a-col>
-                <a-col :span="6"></a-col>
+                
+                <a-col :span="6">
+                    <a-form-item
+                        label="设备编号"
+                        name="deviceID"
+                        >
+                            <a-input v-model:value="data.searchForm.deviceID" placeholder="请输入设备编号" />
+                    </a-form-item>
+                </a-col>
             </a-row>
             
         </a-form>
@@ -259,8 +290,8 @@ onMounted(() => {
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
-            <a-button class="btn">重置搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
+            <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>
         
     </div>

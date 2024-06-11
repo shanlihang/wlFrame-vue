@@ -1,10 +1,11 @@
 import request  from "@/utils/request";
 
 // 查询结果列表
-export function getResultList(){
+export function getResultList(params:object){
     return request({
         url:'/api/v1/medical/result/list',
-        method:'get'
+        method:'get',
+        params:params
     })
 }
 
