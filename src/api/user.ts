@@ -1,10 +1,11 @@
 import request  from "@/utils/request";
 
 // 查询用户列表
-export function getUserList(){
+export function getUserList(params:object){
     return request({
         url:'/api/v1/system/user/list',
-        method:'get'
+        method:'get',
+        params:params
     })
 }
 

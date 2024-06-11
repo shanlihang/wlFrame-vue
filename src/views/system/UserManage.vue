@@ -51,10 +51,10 @@ interface Data{
     addModal:boolean,
     updateModal:boolean,
     searchForm:{
-        name:string,
-        sex:number|undefined,
-        phone:string,
-        email:string,
+        name:string|undefined,
+        phone:string|undefined,
+        email:string|undefined,
+        roles:number[]|undefined
     },
     table:Table[],
     addForm:AddForm,
@@ -66,10 +66,10 @@ const data = reactive<Data>({
     addModal:false,
     updateModal:false,
     searchForm:{
-        name:'',
-        sex:undefined,
-        phone:'',
-        email:''
+        name:undefined,
+        phone:undefined,
+        email:undefined,
+        roles:undefined
     },
     table:[],
     addForm:{
@@ -145,17 +145,23 @@ const columns = [
     },
 ];
 
-const initData = () => {
-    getUserList().then(res => {
-        data.table = res.data 
-        console.log(data.table);
-        
+const initRoles = () => {
+    getRoleList().then(res => {
+        data.roleList = res.data
     })
 }
 
+const initData = () => {
+    getUserList(data.searchForm).then(res => {
+        data.table = res.data
+    })
+}
+
+const handleSearch = () => {
+    initData()
+}
+
 const handleEdit = (record:AddForm) => {
-    console.log(record);
-    
     temp.value = record
     getRoleList().then(res => {
         data.roleList = res.data
@@ -164,10 +170,11 @@ const handleEdit = (record:AddForm) => {
 }
 
 const resetSearch = () => {
-    data.searchForm.name='',
-    data.searchForm.sex=undefined,
-    data.searchForm.phone='',
-    data.searchForm.email=''
+    data.searchForm.name=undefined,
+    data.searchForm.phone=undefined,
+    data.searchForm.email=undefined,
+    data.searchForm.roles=undefined,
+    initData()
 }
 
 const resetAdd = () => {
@@ -182,9 +189,6 @@ const resetAdd = () => {
 
 const openModal = () => {
     data.addModal=true
-    getRoleList().then(res => {
-        data.roleList = res.data
-    })
 }
 
 const handleBaseOk = () => {
@@ -225,6 +229,7 @@ const handleDelete = (id:number) => {
 
 onMounted(() => {
     initData()
+    initRoles()
 })
 </script>
 
@@ -249,15 +254,15 @@ onMounted(() => {
                 </a-col>
                 <a-col :span="6">
                     <a-form-item
-                        label="性别"
-                        name="sex"
+                        label="角色"
+                        name="role"
                         >
                         <a-select
-                            v-model:value="data.searchForm.sex"
-                            placeholder="请选择性别"
+                            v-model:value="data.searchForm.roles"
+                            placeholder="请选择角色"
+                            mode="multiple"
                             >
-                            <a-select-option :value="1">男</a-select-option>
-                            <a-select-option :value="0">女</a-select-option>
+                            <a-select-option v-for="i in data.roleList" :key="i.ID" :value="i.ID">{{ i.name }}</a-select-option>
                         </a-select>
                         </a-form-item>
                 </a-col>
@@ -277,6 +282,7 @@ onMounted(() => {
                             <a-input v-model:value="data.searchForm.email" placeholder="请输入邮箱" />
                     </a-form-item>
                 </a-col>
+                <a-col :span="6"></a-col>
             </a-row>
             
         </a-form>
@@ -284,7 +290,7 @@ onMounted(() => {
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
             <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>
         
