@@ -11,7 +11,7 @@ interface Table{
     phone:string,
     email:string,
     birthday:string,
-    roles:string[],
+    Roles:string[],
 }
 
 interface AddForm{
@@ -148,6 +148,8 @@ const columns = [
 const initData = () => {
     getUserList().then(res => {
         data.table = res.data 
+        console.log(data.table);
+        
     })
 }
 
@@ -303,11 +305,11 @@ onMounted(() => {
                 <template v-else-if="column.key === 'roles'">
                     <span>
                         <a-tag
-                            v-for="role in record.roles"
-                            :key="role"
-                            :color="role === 'loser' ? 'volcano' : role.length > 5 ? 'geekblue' : 'green'"
+                            v-for="role in record.Roles"
+                            :key="role.ID"
+                            color="magenta"
                         >
-                            {{ role.toUpperCase() }}
+                            {{ role.name }}
                         </a-tag>
                     </span>
                 </template>
