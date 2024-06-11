@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {reactive,onMounted} from 'vue'
-import {selectFeedback,deleteFeedbackById} from '@/api/feedback'
+import {selectFeedback,deleteFeedbackById,finishFeedback} from '@/api/feedback'
 import {message,Modal} from 'ant-design-vue'
 
 interface Table{
@@ -14,7 +14,7 @@ interface Table{
 
 interface Data{
     searchForm:{
-        content:string,
+        content:string|undefined,
         status:number|undefined
     },
     table:Array<Table>
@@ -22,7 +22,7 @@ interface Data{
 
 const data = reactive<Data>({
     searchForm:{
-        content:'',
+        content:undefined,
         status:undefined
     },
     table:[]
@@ -51,8 +51,8 @@ const columns = [
     },
     {
         title: '反馈人',
-        dataIndex: 'personId',
-        key: 'personId',
+        dataIndex: 'peopleId',
+        key: 'peopleId',
         align:'center',
         width:'200px'
     },
@@ -65,8 +65,9 @@ const columns = [
 ];
 
 const resetSearch = () => {
-    data.searchForm.content = '',
-    data.searchForm.status = undefined
+    data.searchForm.content = undefined,
+    data.searchForm.status = undefined,
+    initData()
 }
 
 const handleDelete = (id:number) => {
@@ -77,7 +78,7 @@ const handleDelete = (id:number) => {
         cancelText:'取消',
         onOk() {
             deleteFeedbackById(id).then(res => {
-                if(res.rowAffect == 1){
+                if(res.rowAffect != 0){
                     message.success('删除成功')
                     initData()
                 }
@@ -89,10 +90,33 @@ const handleDelete = (id:number) => {
     });
 }
 
+const finish = (id:number) => {
+    Modal.confirm({
+        title: '操作确认',
+        content: '您确定已处理这条反馈内容吗？',
+        okText:'确定',
+        cancelText:'取消',
+        onOk() {
+            finishFeedback(id).then(res => {
+                if(res.rowAffect != 0){
+                    message.success('处理完成')
+                    initData()
+                }
+            })
+        },
+        onCancel() {
+            message.info('取消操作')
+        },
+    });
+}
+
+const handleSearch = () => {
+    initData()
+}
+
 const initData = () => {
-    selectFeedback().then(res => {
+    selectFeedback(data.searchForm).then(res => {
         data.table = res.data
-        
     })
 }
 
@@ -145,7 +169,7 @@ onMounted(() => {
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
             <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
     </div>
@@ -153,11 +177,20 @@ onMounted(() => {
         <a-table :columns="columns" :data-source="data.table" size="small">
             <template #bodyCell="{ record,column }">
                 <template v-if="column.key === 'action'">
-                    <a-button v-if="record.status==0" type="link">完成</a-button>
+                    <a-button v-if="record.status==0" type="link" @click="finish(record.ID)">完成</a-button>
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
                 <template v-else-if="column.key === 'status'">
                     <a-tag :color="record.status==0?'warning':'success'">{{record.status==0?'未处理':'已处理'}}</a-tag>
+                </template>
+                <template v-else-if="column.key === 'peopleId'">
+                    <a-popover title="居民信息" trigger="hover">
+                        <template #content>
+                            <p>电话：{{ record.people.phone }}</p>
+                            <p>邮箱：{{ record.people.email }}</p>
+                        </template>
+                        <span style="color: rgb(0, 153, 255);cursor: pointer;">{{ record.people.name }}</span>
+                    </a-popover>
                 </template>
             </template>
         </a-table>
