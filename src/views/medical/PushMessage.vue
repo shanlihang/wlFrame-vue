@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import {reactive,onMounted} from 'vue'
 import {message,Modal} from 'ant-design-vue'
-import {insertPush,selectPush,deletePushById} from '@/api/push'
+import {insertPush,selectPush,deletePushById,updatePush} from '@/api/push'
 
 interface Record{
-    ID?:number,
-    title:string,
-    content:string,
-    CreatedAt?:string,
-    UpdatedAt?:string,
-    DeletedAt?:string
+    ID?:number|undefined,
+    title:string|undefined,
+    content:string|undefined,
+    CreatedAt?:string|undefined,
+    UpdatedAt?:string|undefined,
+    DeletedAt?:string|undefined
 }
 
 interface Data{
@@ -28,12 +28,12 @@ const data = reactive<Data>({
     updateFlag:false,
     detailFlag:false,
     searchForm:{
-        title:'',
-        content:'',
+        title:undefined,
+        content:undefined,
     },
     addForm:{
-        title:'',
-        content:'',
+        title:undefined,
+        content:undefined,
     },
     updateForm:{
         title:'',
@@ -93,7 +93,15 @@ const handleAddOk = () => {
     
 }
 
-const handleUpdateOk = () => {}
+const handleUpdateOk = () => {
+    updatePush(data.updateForm).then(res => {
+        if(res.rowAffect == 1){
+            initData()
+            message.success('修改成功')
+        }
+    })
+    data.updateFlag = false
+}
 
 const handleUpdate = (record:Record) => {
     data.updateForm = record
@@ -101,8 +109,13 @@ const handleUpdate = (record:Record) => {
 }
 
 const resetSearch = () => {
-    data.searchForm.title = '',
-    data.searchForm.content = ''
+    data.searchForm.title = undefined,
+    data.searchForm.content = undefined,
+    initData()
+}
+
+const handleSearch = () => {
+    initData()
 }
 
 const handleDetail = (record:Record) => {
@@ -131,7 +144,7 @@ const handleDelete = (id:number) => {
 }
 
 const initData = () => {
-    selectPush().then(res => {
+    selectPush(data.searchForm).then(res => {
         data.table = res.data
     })
 }
@@ -176,7 +189,7 @@ onMounted(() => {
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
             <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
         <div class="right">

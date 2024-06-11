@@ -10,10 +10,11 @@ export function insertPush(data:object){
 }
 
 //获取推送列表
-export function selectPush(){
+export function selectPush(params:object){
     return request({
         url:'/api/v1/medical/push/list',
-        method:'get'
+        method:'get',
+        params:params
     })
 }
 
@@ -22,5 +23,14 @@ export function deletePushById(id:number){
     return request({
         url:'/api/v1/medical/push/'+id,
         method:'delete',
+    })
+}
+
+//修改推送
+export function updatePush(data:object){
+    return request({
+        url:'/api/v1/medical/push/change',
+        method:'put',
+        data
     })
 }
