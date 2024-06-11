@@ -241,7 +241,7 @@ onMounted(() => {
             </a-form-item>
             
             <a-form-item label="推送内容" name="content" :rules="[{ required: true, message: '文章内容不能为空' }]">
-                <a-textarea v-model:value="data.updateForm.content" show-count :maxlength="20" placeholder="请输入推送内容" />
+                <a-textarea v-model:value="data.updateForm.content" show-count :maxlength="240" placeholder="请输入推送内容" />
             </a-form-item>
         </a-form>
     </a-modal>
