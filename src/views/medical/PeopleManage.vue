@@ -1,22 +1,29 @@
 <script setup lang="ts">
 import {onMounted, reactive} from 'vue'
-import {deletePeopleById,selectPeople,insertPeople} from '@/api/people'
+import {deletePeopleById,selectPeople,insertPeople,updatePeople} from '@/api/people'
 import {message,Modal} from 'ant-design-vue'
 
 interface Record{
-    name:string;
-    sex:string;
-    nation?:string;
-    birthday?:string;
-    idnumber:string;
-    phone?:string;
-    email?:string
+    name:string|undefined;
+    sex:string|undefined;
+    nation?:string|undefined;
+    birthday?:string|undefined;
+    idnumber:string|undefined;
+    phone?:string|undefined;
+    email?:string|undefined
+}
+
+interface Search{
+    name:string|undefined,
+    email:string|undefined,
+    idnumber:string|undefined,
+    phone:string|undefined
 }
 
 interface Data{
     addFlag:boolean,
     updateFlag:boolean,
-    searchForm:Record,
+    searchForm:Search,
     addForm:Record,
     updateForm:Record,
     table:Array<any>
@@ -26,27 +33,27 @@ const data = reactive<Data>({
     addFlag:false,
     updateFlag:false,
     searchForm:{
-        name:'',
-        sex:'',
-        idnumber:'',
-        phone:''
+        name:undefined,
+        email:undefined,
+        idnumber:undefined,
+        phone:undefined
     },
     addForm:{
-        name:'',
-        sex:'',
-        nation:'',
-        birthday:'',
-        idnumber:'',
-        phone:'',
-        email:''
+        name:undefined,
+        sex:undefined,
+        nation:undefined,
+        birthday:undefined,
+        idnumber:undefined,
+        phone:undefined,
+        email:undefined
     },
     updateForm:{
-        name:'',
-        sex:'',
-        nation:'',
-        birthday:'',
-        idnumber:'',
-        phone:''
+        name:undefined,
+        sex:undefined,
+        nation:undefined,
+        birthday:undefined,
+        idnumber:undefined,
+        phone:undefined
     },
     table:[]
 })
@@ -103,20 +110,21 @@ const columns = [
 ];
 
 const resetSearch = () => {
-    data.searchForm.name='',
-    data.searchForm.sex='',
-    data.searchForm.idnumber='',
-    data.searchForm.phone=''
+    data.searchForm.name=undefined,
+    data.searchForm.email=undefined,
+    data.searchForm.idnumber=undefined,
+    data.searchForm.phone=undefined,
+    initData()
 }
 
 const resetAdd = () => {
-    data.addForm.name='',
-    data.addForm.sex='',
-    data.addForm.nation='',
-    data.addForm.birthday='',
-    data.addForm.idnumber='',
-    data.addForm.phone='',
-    data.addForm.email=''
+    data.addForm.name=undefined,
+    data.addForm.sex=undefined,
+    data.addForm.nation=undefined,
+    data.addForm.birthday=undefined,
+    data.addForm.idnumber=undefined,
+    data.addForm.phone=undefined,
+    data.addForm.email=undefined
 }
 
 const handleAddOk = () => {
@@ -130,7 +138,15 @@ const handleAddOk = () => {
     resetAdd()
 }
 
-const handleUpdateOk = () => {}
+const handleUpdateOk = () => {
+    updatePeople(data.updateForm).then(res => {
+        if(res.rowAffect == 1){
+            message.success('修改成功')
+            initData()
+        }
+    })
+    data.updateFlag = false
+}
 
 const handleUpdate = (record:Record) => {
     data.updateForm = record
@@ -157,8 +173,12 @@ const handleDelete = (id:number) => {
     });
 }
 
+const handleSearch = () => {
+    initData()
+}
+
 const initData = () => {
-    selectPeople().then(res => {
+    selectPeople(data.searchForm).then(res => {
         data.table = res.data
     })
 }
@@ -189,17 +209,10 @@ onMounted(() => {
                 </a-col>
                 <a-col :span="6">
                     <a-form-item
-                        label="居民性别"
-                        name="sex"
+                        label="居民邮箱"
+                        name="email"
                         >
-                            <a-select
-                                ref="select"
-                                v-model:value="data.searchForm.sex"
-                                placeholder="请选择居民性别"
-                                >
-                                <a-select-option value="男">男</a-select-option>
-                                <a-select-option value="女">女</a-select-option>
-                            </a-select>
+                            <a-input v-model:value="data.searchForm.email" placeholder="请输入居民邮箱" />
                         </a-form-item>
                 </a-col>
                 <a-col :span="6">
@@ -220,11 +233,10 @@ onMounted(() => {
                 </a-col>
             </a-row>
         </a-form>
-
     </div>
     <div class="handle">
         <div class="left">
-            <a-button class="btn" type="primary">搜索</a-button>
+            <a-button class="btn" type="primary" @click="handleSearch">搜索</a-button>
             <a-button class="btn" @click="resetSearch">重置搜索</a-button>
         </div>        
         <div class="right">
@@ -267,7 +279,7 @@ onMounted(() => {
                     <a-input v-model:value="data.addForm.nation" placeholder="请输入居民民族" />
             </a-form-item>
             <a-form-item label="出生日期" name="birthday">
-                <a-date-picker v-model:value="data.addForm.birthday" placeholder="请选择出生日期" />
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="data.addForm.birthday" placeholder="请选择出生日期" />
             </a-form-item>
             <a-form-item label="身份证号" name="idnumber">
                 <a-input v-model:value="data.addForm.idnumber" placeholder="请输入居民身份证号" />
@@ -291,19 +303,19 @@ onMounted(() => {
             autocomplete="off"
         >
             <a-form-item label="居民姓名" name="name">
-                    <a-input v-model:value="data.updateForm.name" placeholder="请输入居民姓名" />
+                <a-input v-model:value="data.updateForm.name" placeholder="请输入居民姓名" />
             </a-form-item>
             <a-form-item label="居民性别" name="sex">
                 <a-select v-model:value="data.updateForm.sex" placeholder="请选择居民性别">
-                    <a-select-option :value="1">男</a-select-option>
-                    <a-select-option :value="0">女</a-select-option>
+                    <a-select-option value="男">男</a-select-option>
+                    <a-select-option value="女">女</a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="居民民族" name="nation">
                     <a-input v-model:value="data.updateForm.nation" placeholder="请输入居民民族" />
             </a-form-item>
             <a-form-item label="出生日期" name="birthday">
-                <a-date-picker v-model:value="data.updateForm.birthday" placeholder="请选择出生日期" />
+                <a-date-picker valueFormat="YYYY-MM-DD" v-model:value="data.updateForm.birthday" placeholder="请选择出生日期" />
             </a-form-item>
             <a-form-item label="身份证号" name="idnumber">
                 <a-input v-model:value="data.updateForm.idnumber" placeholder="请输入居民身份证号" />

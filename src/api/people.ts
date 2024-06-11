@@ -9,11 +9,21 @@ export function insertPeople(data:object){
     })
 }
 
+//修改居民
+export function updatePeople(data:object){
+    return request({
+        url:'/api/v1/medical/people/update',
+        method:'put',
+        data
+    })
+}
+
 //获取居民列表
-export function selectPeople(){
+export function selectPeople(params:object){
     return request({
         url:'/api/v1/medical/people/list',
-        method:'get'
+        method:'get',
+        params:params
     })
 }
 
