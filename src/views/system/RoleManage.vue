@@ -98,7 +98,11 @@ const initData = () => {
 
 const handleBaseOk = () => {
     addRole(data.addForm).then(res => {
-        console.log(res);
+        if(res.rowAffect == 1){
+            initData()
+            message.info('添加成功')
+        }
+    data.addModal = false
         
     })
     

@@ -3,11 +3,6 @@ import { onMounted, reactive,ref } from 'vue';
 import { getMenuTree,getList,insertPermission,updatePermission,deletePermission } from '@/api/permission';
 import {message,Modal} from 'ant-design-vue'
 const columns = [   
-    {
-    title: '编号',
-    dataIndex: 'ID',
-    key: 'ID',
-  },
   {
     title: '名称',
     dataIndex: 'name',

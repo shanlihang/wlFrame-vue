@@ -358,7 +358,6 @@ onMounted(() => {
             <a-form-item
                 label="物品"
                 name="name"
-                :rules="[{ required: true, message: '入库操作必须选择物品' }]"
             >
             <a-select
                 v-model:value="data.putForm.id"
@@ -370,7 +369,6 @@ onMounted(() => {
             <a-form-item
                 label="物品数量"
                 name="num"
-                :rules="[{ required: true, message: '物品数量不能为空' }]"
             >
                 <a-input-number v-model:value="data.putForm.num" style="width: 100%;" :min="0" placeholder="请输入物品数量" />
             </a-form-item>
@@ -389,7 +387,6 @@ onMounted(() => {
             <a-form-item
                 label="物品"
                 name="name"
-                :rules="[{ required: true, message: '出库操作必须选择物品' }]"
             >
             <a-select
                 v-model:value="data.outForm.id"
@@ -401,7 +398,6 @@ onMounted(() => {
             <a-form-item
                 label="物品数量"
                 name="num"
-                :rules="[{ required: true, message: '物品数量不能为空' }]"
             >
                 <a-input-number v-model:value="data.outForm.num" style="width: 100%;" :min="0" placeholder="请输入物品数量" />
             </a-form-item>

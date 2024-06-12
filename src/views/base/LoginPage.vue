@@ -31,6 +31,7 @@ const data = reactive<Data>({
 const onFinish = () => {
   login(data.loginForm).then(res => {
     Session.setBase("token",res.token)
+    store.userInfo = res.userInfo
     getMenuTree().then(res => {
       store.menu = res.data
     })
@@ -64,7 +65,7 @@ const onFinish = () => {
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 16 }"
             >
-              <a-input v-model:value="data.loginForm.password"  placeholder="请输入密码" />
+              <a-input-password v-model:value="data.loginForm.password"  placeholder="请输入密码" />
             </a-form-item>
             <a-form-item>
               <div style="display: flex;justify-content: center;">
