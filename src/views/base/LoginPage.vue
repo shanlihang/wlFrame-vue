@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {reactive} from 'vue'
-import {login,register} from '@/api/system'
+import {login} from '@/api/system'
 import {Session} from '@/utils/storage'
 import router from '@/router';
-import {getMenuList} from '@/api/permission'
+import {getMenuTree} from '@/api/permission'
 import {useSystemStore} from '@/store/system'
-import {AddRoutes} from '@/router'
 
 interface LoginForm {
   username:string,
@@ -32,7 +31,7 @@ const data = reactive<Data>({
 const onFinish = () => {
   login(data.loginForm).then(res => {
     Session.setBase("token",res.token)
-    getMenuList().then(res => {
+    getMenuTree().then(res => {
       store.menu = res.data
     })
     router.push('/')
@@ -76,9 +75,6 @@ const onFinish = () => {
             </a-form-item>
           </a-form>
         </div>
-        <div class="btn">
-          <span>没有账号，<span style="color: #2E77FC;cursor: pointer;">去注册</span></span>
-        </div>
       </div>
     </div>
   </div>
@@ -115,11 +111,7 @@ const onFinish = () => {
         text-align: center;
         margin: 10px 0;
       }
-      .btn{
-        text-align: center;
-        color: #A0A0A0;
-        font-size: 12px;
-      }
+      
     }
   }
 }

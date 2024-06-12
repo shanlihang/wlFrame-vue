@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export const getMenuList = function(){
+    return request({
+        url:"/api/v1/system/permission/menu",
+        method:'get'
+    })
+}
+
 export const getList = function(){
     return request({
         url:"/api/v1/system/permission/common",
