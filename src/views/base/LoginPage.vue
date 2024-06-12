@@ -34,7 +34,6 @@ const onFinish = () => {
     Session.setBase("token",res.token)
     getMenuList().then(res => {
       store.menu = res.data
-      AddRoutes(store.menu)
     })
     router.push('/')
   })

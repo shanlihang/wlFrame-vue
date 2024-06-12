@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import router from '@/router';
+import { Session } from '@/utils/storage';
 import {DownOutlined} from '@ant-design/icons-vue'
 import {pinyin} from 'pinyin-pro'
 import {onMounted} from 'vue'
@@ -16,6 +17,11 @@ const goHome = () => {
   router.push('/home')
 }
 
+const logout = () => {
+  Session.clear()
+  router.push('/login')
+}
+
 onMounted(() => {
 })
 
@@ -28,7 +34,7 @@ onMounted(() => {
         <template #content>
           <p class="option" @click="goIndex">首页</p>
           <p class="option" @click="goHome">个人中心</p>
-          <p class="option">退出登录</p>
+          <p class="option" @click="logout">退出登录</p>
         </template>
         <div class="user">
           <div class="info">

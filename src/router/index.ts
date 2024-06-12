@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import IndexPage from '@/views/base/IndexPage.vue'
-import {MenuType,RouteType} from '@/model/menu'
 import { Session } from '@/utils/storage';
 
 const routes = [
@@ -24,6 +23,10 @@ const routes = [
     {
         path:'/role',
         component:() => import('@/views/system/RoleManage.vue')
+    },
+    {
+        path:'/permission',
+        component:() => import('@/views/system/PermissionManage.vue')
     },
     {
         path:'/good',
@@ -57,30 +60,14 @@ const router = createRouter({
 })
 
 
-// router.beforeEach((to,from,next) => {
-//     if(to.path == '/login' || to.path == '/register'){
-//         next()
-//     }else{
-//         Session.get("token") != null ? next() : next('/login')
-//     }
-// })
+router.beforeEach((to,from,next) => {
+    if(to.path == '/login' || to.path == '/register'){
+        next()
+    }else{
+        Session.get("token") != null ? next() : next('/login')
+    }
+})
 
 // router.afterEach(() => {})
 
-
-
 export default router
-
-export function AddRoutes(list:MenuType[]){
-    list.forEach(element => {
-        element.children.forEach(item => {
-            router.addRoute({
-                path:item.uri,
-                component:() =>import('@/views/'+item.component+'.vue'),
-                meta:{
-                    title:item.name
-                }
-            })
-        })
-    })
-}

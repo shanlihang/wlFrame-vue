@@ -7,7 +7,6 @@ const data = defineProps(['list'])
 
 const goMenu = (i:MenuType) => {
   router.push(i.router)
-  
 }
 </script>
 
