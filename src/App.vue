@@ -5,7 +5,11 @@
   
 </template>
 <script lang="ts" setup>
+import * as echarts from "echarts";
 import MainView from '@/views/main/MainView.vue';
+import {provide} from 'vue'
+
+provide("echarts", echarts);
 
 
 
