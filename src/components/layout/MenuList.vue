@@ -13,8 +13,12 @@ const goMenu = (i:MenuType) => {
 <template>
   <div class="menuList box">
     <div class="menu">
-      <div class="logo">
-        <slot name="logo">LOGO</slot>
+      <div class="logo" @click="router.push('/')">
+        <img src="../../assets/logo.jpg" style="width: 80px;height: 80px;" alt="">
+        <div class="name">
+          <div class="chinese">海 科 医 疗</div>
+          <div class="pinyin">HAI KE YI LIAO</div>
+        </div>
       </div>
       <div class="list" v-for="item in data.list" :key="item.ID">
         <div class="title">{{ item.name }}</div>
@@ -39,8 +43,22 @@ const goMenu = (i:MenuType) => {
     height: 100%;
 
     .logo {
-      height: 80px;
-      background-color: aliceblue;
+      width: 100%;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid #8c8cbc;
+      border-radius: 6px;
+      cursor: pointer;
+      .name{
+        flex:1 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 17px;
+        font-weight: bold;
+      }
     }
 
     .list {
