@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { reactive,onMounted } from 'vue';
-import {getRoleList,deleteRole} from '@/api/role'
+import {getRoleList,deleteRole,addRole} from '@/api/role'
+import {getMenuTree} from '@/api/permission'
 import { message,Modal } from 'ant-design-vue';
+import { TreeSelect } from 'ant-design-vue';
 
 interface Table{
     key?:string,
     name:string,
     desc:string,
+    permissions:any[]
     created_at?:string
 }
 
@@ -17,7 +20,8 @@ interface Data{
         desc:string,
     },
     table:Table[],
-    addForm:Table
+    addForm:Table,
+    permission:any[]
 }
 
 const data = reactive<Data>({
@@ -30,7 +34,9 @@ const data = reactive<Data>({
     addForm:{
         name:'',
         desc:'',
-    }
+        permissions:[]
+    },
+    permission:[]
     
 })
 
@@ -49,8 +55,8 @@ const columns = [
     },
     {
         title: '创建时间',
-        key: 'created_at',
-        dataIndex: 'created_at',
+        key: 'CreatedAt',
+        dataIndex: 'CreatedAt',
         align:'center'
     },
     {
@@ -59,6 +65,8 @@ const columns = [
         align:'center'
     },
 ];
+
+const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 
 const handleDelete = (id:number) => {
     Modal.confirm({
@@ -88,10 +96,19 @@ const initData = () => {
     })
 }
 
-const handleBaseOk = () => {}
+const handleBaseOk = () => {
+    addRole(data.addForm).then(res => {
+        console.log(res);
+        
+    })
+    
+}
 
 onMounted(() => {
     initData()
+    getMenuTree().then(res => {
+        data.permission = res.data
+    })
 })
 </script>
 
@@ -141,7 +158,6 @@ onMounted(() => {
         <a-table :columns="columns" :data-source="data.table" size="small">
             <template #bodyCell="{ record,column }">
                 <template v-if="column.key === 'action'">
-                    <a-button type="link">详情</a-button>
                     <a-button type="link">编辑</a-button>
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button> 
                 </template>
@@ -170,6 +186,24 @@ onMounted(() => {
                 :rules="[{ required: true, message: '角色描述不能为空' }]"
                 >
                 <a-textarea :auto-size="{ minRows: 2, maxRows: 5 }" v-model:value="data.addForm.desc" placeholder="请输入角色描述" />
+            </a-form-item>
+            <a-form-item
+                label="角色权限"
+                name="permissions"
+                :rules="[{ required: true, message: '角色权限不能为空' }]"
+            >
+            <a-tree-select
+                :fieldNames="{children:'children', label:'name', value: 'ID' }"
+                v-model:value="data.addForm.permissions"
+                style="width: 100%"
+                :tree-data="data.permission"
+                tree-checkable
+                allow-clear
+                treeCheckStrictly
+                :show-checked-strategy="SHOW_PARENT"
+                placeholder="请为用户分配权限"
+                tree-node-filter-prop="label"
+            />
             </a-form-item>
         </a-form>
     </a-modal>
