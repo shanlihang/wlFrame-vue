@@ -52,33 +52,30 @@ const columns = [
         dataIndex: 'title',
         key: 'title',
         align:'center',
-        width:'400px'
     },
     {
         title: '内容',
         key: 'content',
         dataIndex: 'content',
         align:'center',
+        width:'800px',
     },
     {
         title: '发布时间',
         dataIndex: 'CreatedAt',
         key: 'CreatedAt',
         align:'center',
-        width:'200px'
     },
     {
         title: '更新时间',
         dataIndex: 'UpdatedAt',
         key: 'UpdatedAt',
         align:'center',
-        width:'200px'
     },
     {
         title: '操作',
         key: 'action',
         align:'center',
-        width:'200px'
     },
 ];
 
