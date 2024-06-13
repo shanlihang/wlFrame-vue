@@ -25,3 +25,12 @@ export function deleteUser(id:number){
         method:'delete',
     })
 }
+
+//修改用户
+export function udpateUser(data:object){
+    return request({
+        url:'/api/v1/system/user/change',
+        method:'put',
+        data:data
+    })
+}

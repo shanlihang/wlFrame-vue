@@ -2,7 +2,7 @@
 import { reactive,onMounted } from 'vue';
 import {getGoodsList,deleteGoods,addGoods,updateGoods,putGood,OutGood} from '@/api/goods'
 import {message,Modal} from 'ant-design-vue'
-
+import dayjs from 'dayjs'
 interface Table{
     ID?:number,
     key:string,
@@ -138,6 +138,10 @@ const handleDelete = (id:number) => {
     });
 }
 
+const formatDate = (time:string) => {
+    return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+}
+
 const handleAddOk = () => {
     addGoods(data.addForm).then(res => {
         if(res.rowAffect == 1){
@@ -271,6 +275,12 @@ onMounted(() => {
                 </template>
                 <template v-else-if="column.key === 'num'">
                     {{record.num<=0||record.num==undefined?'暂无库存':record.num.toString()+record.uint}}
+                </template>
+                <template v-else-if="column.key === 'CreatedAt'">
+                    {{formatDate(record.CreatedAt)}}
+                </template>
+                <template v-else-if="column.key === 'UpdatedAt'">
+                    {{formatDate(record.UpdatedAt)}}
                 </template>
             </template>
         </a-table>

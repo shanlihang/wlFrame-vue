@@ -4,6 +4,7 @@ import {getRoleList,deleteRole,addRole} from '@/api/role'
 import {getMenuTree} from '@/api/permission'
 import { message,Modal } from 'ant-design-vue';
 import { TreeSelect } from 'ant-design-vue';
+import dayjs from 'dayjs'
 
 interface Table{
     key?:string,
@@ -65,6 +66,10 @@ const columns = [
         align:'center'
     },
 ];
+
+const formatDate = (time:string) => {
+    return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+}
 
 const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 
@@ -164,6 +169,9 @@ onMounted(() => {
                 <template v-if="column.key === 'action'">
                     <a-button type="link">编辑</a-button>
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button> 
+                </template>
+                <template v-else-if="column.key === 'CreatedAt'">
+                    {{formatDate(record.CreatedAt)}}
                 </template>
             </template>
         </a-table>

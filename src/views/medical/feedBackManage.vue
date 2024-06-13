@@ -2,6 +2,7 @@
 import {reactive,onMounted} from 'vue'
 import {selectFeedback,deleteFeedbackById,finishFeedback} from '@/api/feedback'
 import {message,Modal} from 'ant-design-vue'
+import dayjs from 'dayjs'
 
 interface Table{
     ID?:number,
@@ -63,6 +64,10 @@ const columns = [
         width:'150px'
     },
 ];
+
+const formatDate = (time:string) => {
+    return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+}
 
 const resetSearch = () => {
     data.searchForm.content = undefined,
@@ -182,6 +187,9 @@ onMounted(() => {
                 </template>
                 <template v-else-if="column.key === 'status'">
                     <a-tag :color="record.status==0?'warning':'success'">{{record.status==0?'未处理':'已处理'}}</a-tag>
+                </template>
+                <template v-else-if="column.key === 'CreatedAt'">
+                    {{formatDate(record.CreatedAt)}}
                 </template>
                 <template v-else-if="column.key === 'peopleId'">
                     <a-popover title="居民信息" trigger="hover">

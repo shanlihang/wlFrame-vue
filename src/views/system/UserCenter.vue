@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {pinyin} from 'pinyin-pro'
-import { reactive } from 'vue';
+import { reactive,onMounted } from 'vue';
+import {udpateUser} from '@/api/user'
+import {useSystemStore} from '@/store/system'
 
 interface Data{
     phoneFlag:boolean,
@@ -12,6 +14,7 @@ interface Data{
     },
     userInfo:UserInfo,
     updateBase:{
+        ID:number|undefined,
         name:string,
         username:string,
         sex:number|undefined,
@@ -25,13 +28,14 @@ interface Data{
 
 
 interface UserInfo{
-    name:string,
-    username:string,
-    sex:number|undefined,
-    phone:string,
-    email:string,
-    birthday:string,
-    created_at:string
+    ID?:number,
+    name?:string,
+    username?:string,
+    sex?:number|undefined,
+    phone?:string,
+    email?:string,
+    birthday?:string,
+    created_at?:string
 }
 
 const data = reactive<Data>({
@@ -42,16 +46,9 @@ const data = reactive<Data>({
         captcha:undefined,
         newPhone:''
     },
-    userInfo:{
-        name:'张三',
-        username:'zs',
-        sex:1,
-        phone:'18348563173',
-        email:'67490009@qq.com',
-        birthday:'2001-10-25',
-        created_at:'2024/4/12'
-    },
+    userInfo:{},
     updateBase:{
+        ID:undefined,
         name:'',
         username:'',
         sex:undefined
@@ -61,6 +58,12 @@ const data = reactive<Data>({
         newPwd:'',
         confirmPwd:''
     }
+})
+
+const store = useSystemStore()
+
+onMounted(() =>{
+    data.userInfo = store.userInfo
 })
 
 const getFirstLetter = (name:string) => {
@@ -76,7 +79,7 @@ const cancelUpdate = () => {
 }
 
 const updateBase = () => {
-    data.updateBase.name = data.userInfo.name
+    data.updateBase.ID = data.userInfo.ID
     data.updateBase.username = data.userInfo.username
     data.updateBase.sex = data.userInfo.sex
     data.baseModal = true
@@ -85,6 +88,10 @@ const updateBase = () => {
 const handleBaseOk = () => {
     data.baseModal = false
     console.log(data.updateBase);
+    udpateUser(data.updateBase).then(res => {
+        console.log(res);
+        
+    })
     
     data.updateBase.name = ''
     data.updateBase.username = ''
@@ -106,10 +113,10 @@ const handlePwdOk = () => {
 
 <template>
   <div class="user-center">
-    <div class="handle">
+    <!-- <div class="handle">
         <a-button type="primary" @click="updateBase">修改基础信息</a-button>
         <a-button type="primary" style="margin-left: 20px;" @click="updatePwd">修改密码</a-button>
-    </div>
+    </div> -->
     <div class="info">
         <a-card title="用户信息" bordered size="small" type="inner" style="width: 100%">
             <div class="section">
@@ -130,7 +137,7 @@ const handlePwdOk = () => {
             </div>
         </a-card>
     </div>
-    <div class="update">
+    <!-- <div class="update">
         <a-card title="修改手机号" bordered size="small" type="inner" style="width: 100%">
             <div class="section">
                 <div>当前手机号：<span style="font-weight: bold;">18348563173</span></div>
@@ -152,7 +159,7 @@ const handlePwdOk = () => {
             </div>
             
         </a-card>
-    </div>
+    </div> -->
     <a-modal v-model:open="data.baseModal" title="修改基础信息" okText="确认" cancelText="取消" @ok="handleBaseOk">
         <a-form
             style="margin-top: 20px;"
@@ -239,7 +246,6 @@ const handlePwdOk = () => {
 <style scoped lang="less">
 .user-center{
     height: 100%;
-    padding-top: 20px;
     .handle{
         width: 98%;
         overflow: hidden;

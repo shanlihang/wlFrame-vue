@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {reactive,onMounted} from 'vue'
 import {message,Modal} from 'ant-design-vue'
+import dayjs from 'dayjs'
 import {insertPush,selectPush,deletePushById,updatePush} from '@/api/push'
 
 interface Record{
@@ -78,6 +79,10 @@ const columns = [
         align:'center',
     },
 ];
+
+const formatDate = (time:string) => {
+    return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
+}
 
 const handleAddOk = () => {
     insertPush(data.addForm).then(res => {
@@ -201,6 +206,12 @@ onMounted(() => {
                     <a-button type="link" @click="handleUpdate(record)">编辑</a-button>
                     <a-button type="link" danger @click="handleDelete(record.ID)">删除</a-button>
                 </template>
+                <template v-else-if="column.key === 'CreatedAt'">
+                    {{formatDate(record.CreatedAt)}}
+                </template>
+                <template v-else-if="column.key === 'UpdatedAt'">
+                    {{formatDate(record.UpdatedAt)}}
+                </template>
             </template>
         </a-table>
     </div>
@@ -255,10 +266,10 @@ onMounted(() => {
             <span>{{ data.detailForm.content }}</span>
         </a-form-item>
         <a-form-item label="推送时间" name="title">
-            <span>{{ data.detailForm.CreatedAt }}</span>
+            <span>{{ formatDate(data.detailForm.CreatedAt) }}</span>
         </a-form-item>
         <a-form-item label="更新时间" name="title">
-            <span>{{ data.detailForm.UpdatedAt }}</span>
+            <span>{{ formatDate(data.detailForm.UpdatedAt) }}</span>
         </a-form-item>
     </a-drawer>
   </div>

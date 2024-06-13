@@ -2,6 +2,7 @@
 import { reactive,onMounted } from 'vue';
 import {getResultList,deleteResult} from '@/api/result'
 import {message,Modal} from 'ant-design-vue'
+import dayjs from 'dayjs'
 
  export interface Result {
     blood?: Blood;
@@ -137,9 +138,10 @@ const columns = [
         width:180
     },
     {
-        title: '性别',
-        key: 'sex',
+        title: '检测时间',
+        key: 'CreatedAt',
         align:'center',
+        width:180
     },
     {
         title: '年龄',
@@ -185,8 +187,6 @@ const columns = [
     },
 ];
 
-const type = ['空腹','餐后一小时','餐后两小时']
-
 const handleDelete = (id:number) => {
     Modal.confirm({
         title: '删除确认',
@@ -217,6 +217,10 @@ const resetSearch = () => {
     data.searchForm.examNo=undefined
     data.searchForm.deviceID=undefined
     initData()
+}
+
+const formatDate = (time:string) => {
+    return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
 }
 
 const showDetail = (item:Result) => {
@@ -308,8 +312,8 @@ onMounted(() => {
                 <template v-else-if="column.key === 'idnumber'">
                     {{ record.sfz.idnumber }}
                 </template>
-                <template v-else-if="column.key === 'sex'">
-                    {{ record.sfz.sex }}
+                <template v-else-if="column.key === 'CreatedAt'">
+                    {{formatDate(record.CreatedAt)}}
                 </template>
                 <template v-else-if="column.key === 'age'">
                     {{ record.sfz.age }}

@@ -3,6 +3,7 @@ import {reactive,onMounted} from 'vue'
 import {getInputTips} from '@/api/gd'
 import {insertCommunity,selectCommunity,deleteCommunityById} from '@/api/community'
 import {message,Modal} from 'ant-design-vue'
+import dayjs from 'dayjs'
 
 //输入提示接口
 interface InputTips{
@@ -125,6 +126,10 @@ const searchTips = (keywords:string) => {
 //新增社区的弹窗输入事件
 const change = () => {
   searchTips(data.address)
+}
+
+const formatDate = (time:string) => {
+    return dayjs(time).format('YYYY-MM-DD HH:mm:ss')
 }
 
 //新增社区弹窗确认事件
@@ -321,8 +326,8 @@ onMounted(() => {
         <a-descriptions-item label="区域编码">{{ data.tempRecord?.adcode }}</a-descriptions-item>
         <a-descriptions-item label="地区坐标">[{{ data.tempRecord?.location }}]</a-descriptions-item>
         <a-descriptions-item label="详细地址">{{ data.tempRecord?.address }}</a-descriptions-item>
-        <a-descriptions-item label="创建时间">{{ data.tempRecord?.CreatedAt }}</a-descriptions-item>
-        <a-descriptions-item label="更新时间">{{ data.tempRecord?.UpdatedAt }}</a-descriptions-item>
+        <a-descriptions-item label="创建时间">{{ formatDate(data.tempRecord?.CreatedAt) }}</a-descriptions-item>
+        <a-descriptions-item label="更新时间">{{ formatDate(data.tempRecord?.UpdatedAt) }}</a-descriptions-item>
         
     </a-descriptions>
     </a-drawer>
